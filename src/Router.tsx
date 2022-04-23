@@ -5,8 +5,16 @@ import { NotFound } from "./pages/NotFound";
 import { Polls } from "./pages/Polls";
 import { Poll } from "./pages/Poll";
 import { CreatePoll } from "./pages/CreatePoll";
+import { useAuth } from "./hooks/useAuth";
+import { Loading } from "./components/Loading";
 
 export const Router = () => {
+  const { loading } = useAuth();
+
+  if (loading) {
+    return <Loading />;
+  }
+
   return (
     <BrowserRouter>
       <Routes>

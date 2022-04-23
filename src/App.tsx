@@ -1,5 +1,10 @@
+import { AuthContextProvider } from "./contexts/AuthContext";
 import { Router } from "./Router";
 
 export const App = () => {
-  return <Router />;
+  return (
+    <AuthContextProvider>
+      <Router />
+    </AuthContextProvider>
+  );
 };
