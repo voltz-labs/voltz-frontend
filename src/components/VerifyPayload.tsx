@@ -17,13 +17,18 @@ export const VerifyPayload = () => {
   const verifyPayload = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const verified = verifySignature(
-      fields.payload,
-      fields.publicKey,
-      fields.signature
-    );
+    setResult(null);
 
-    setResult({ verified });
+    try {
+      const verified = verifySignature(
+        fields.payload,
+        fields.publicKey,
+        fields.signature
+      );
+      setResult({ verified });
+    } catch (err) {
+      setResult({ verified: false });
+    }
   };
 
   return (

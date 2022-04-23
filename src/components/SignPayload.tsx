@@ -28,6 +28,8 @@ export const SignPayload = ({ user }: SignPayloadProps) => {
   const signPayload = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    setResult(null);
+
     const bytes = convertStringToHex(fields.message);
 
     const length = convertNumberToHex(bytes.length);

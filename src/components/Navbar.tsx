@@ -55,8 +55,12 @@ export const Navbar = () => {
                 />
               }
             >
+              <NavDropdown.Item as={Link} to="/profile">
+                Profile
+              </NavDropdown.Item>
+              <NavDropdown.Divider />
               <NavDropdown.Item onClick={disconnectWallet}>
-                Logout
+                Disconnect
               </NavDropdown.Item>
             </NavDropdown>
           ) : (
