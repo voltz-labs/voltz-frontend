@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Button, Form } from "react-bootstrap";
 import { verifySignature } from "@taquito/utils";
+import { convertHexToString } from "../functions/convertHexToString";
 
 export interface ResultStateProps {
   verified: boolean;
@@ -69,7 +70,12 @@ export const VerifyPayload = () => {
               }))
             }
           />
-          <Form.Text className="text-muted">The hexbyte payload.</Form.Text>
+          <Form.Text className="text-muted">
+            The hexbyte payload.
+            {/^([0-9a-f]{2})+$/.test(fields.payload.slice(12))
+              ? ` Decoded: ${convertHexToString(fields.payload.slice(12))}`
+              : ""}
+          </Form.Text>
         </Form.Group>
         <Form.Group className="mb-3">
           <Form.Label htmlFor="signature">Signature</Form.Label>
