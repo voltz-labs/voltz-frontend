@@ -1,0 +1,9 @@
+version: '3'
+
+services:
+  nginx:
+    build: .
+    image: $DOCKER_IMAGE
+    ports:
+      - $PORT:80
+    restart: always
