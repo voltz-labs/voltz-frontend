@@ -1,4 +1,4 @@
-import { Button } from "react-bootstrap";
+import { Button, Container, Form } from "react-bootstrap";
 import { Fallback } from "../components/Fallback";
 import { Navbar } from "../components/Navbar";
 import { convertNumberToHex } from "../functions/convertNumberToHex";
@@ -15,9 +15,15 @@ import {
 import { wallet } from "../utils/wallet";
 import { SigningType } from "@airgap/beacon-sdk";
 import { graphql } from "../functions/graphql";
+import { useState } from "react";
+import { useSubmit } from "../hooks/useSubmit";
+import { GraphQLError } from "./GraphQLError";
+import { useSuccess } from "../hooks/useSuccess";
 
 export interface MutationVoteCreate {
-  voteId: string;
+  voteCreate: {
+    voteId: string;
+  };
 }
 
 export interface MutationVoteCreateVariables {}
@@ -77,6 +83,14 @@ export interface PollProps {
 export const Poll = ({ user }: PollProps) => {
   const { params } = useRouter();
 
+  const [selectedOption, setSelectedOption] = useState<string | null>(null);
+
+  const router = useRouter();
+
+  const { loading: submitLoading, submit } = useSubmit();
+
+  const { createSuccess } = useSuccess();
+
   const pollId = params.pollId!;
 
   const Q = useQuery<PollQuery>({
@@ -88,7 +102,6 @@ export const Poll = ({ user }: PollProps) => {
     },
   });
 
-  console.log(Q);
   if (Q.fallback) {
     return (
       <div>
@@ -99,11 +112,19 @@ export const Poll = ({ user }: PollProps) => {
     );
   }
 
-  const { data } = Q;
+  const {
+    data: {
+      poll: { ...poll },
+    },
+  } = Q;
 
-  const poll = data.poll;
+  const onSubmit = submit(async () => {
+    if (!selectedOption) {
+      return;
+    }
 
-  const vote = async (optionId: string) => {
+    const optionId = selectedOption;
+
     const voteId = nanoid();
 
     const content = {
@@ -145,28 +166,55 @@ export const Poll = ({ user }: PollProps) => {
       },
     });
 
-    console.log({ data, errors });
-  };
+    if (errors) {
+      throw new GraphQLError("Failed to vote", errors);
+    }
+
+    createSuccess({
+      message: `Vote "${data.voteCreate.voteId}" cast with success`,
+      onClose: async () => {
+        router.push({
+          path: "/",
+        });
+      },
+    });
+  });
 
   return (
     <div>
       <Navbar />
-      <p>PollId: {data.poll.pollId}</p>
-      <p>Title: {data.poll.title}</p>
-      <p>Description: {data.poll.description}</p>
-      <div>
-        <p>Options:</p>
-        <ul>
-          {data.poll.options.map((option) => (
-            <li key={option.optionId} className="mb-5">
-              <p>{option.description}</p>
-              <Button type="button" onClick={() => vote(option.optionId)}>
-                Vote
-              </Button>
-            </li>
-          ))}
-        </ul>
-      </div>
+      <Container className="py-5">
+        <h2 className="border-bottom mb-2">{poll.title}</h2>
+        <Form onSubmit={onSubmit()}>
+          <section>
+            <strong>Description:</strong>
+            <p>{poll.description}</p>
+          </section>
+          <section>
+            <strong>Options:</strong>
+            <ul>
+              {poll.options.map((option) => (
+                <li key={option.optionId}>
+                  <Form.Check
+                    type="radio"
+                    id={`option-${option.optionId}`}
+                    name="optionId"
+                    value={option.optionId}
+                    label={option.description}
+                    checked={selectedOption === option.optionId}
+                    onChange={(e) =>
+                      e.target.checked && setSelectedOption(option.optionId)
+                    }
+                  />
+                </li>
+              ))}
+            </ul>
+          </section>
+          <Button variant="primary" type="submit" disabled={submitLoading}>
+            Vote
+          </Button>
+        </Form>
+      </Container>
     </div>
   );
 };

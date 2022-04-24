@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Table } from "react-bootstrap";
 
 export interface RecentVotesProps {
   votes: {
@@ -17,21 +17,26 @@ export interface RecentVotesProps {
 
 export const RecentVotes = ({ votes }: RecentVotesProps) => {
   return (
-    <div className="my-3 p-3 bg-white rounded box-shadow">
-      <h6 className="border-bottom border-gray pb-2 mb-0">Recent votes</h6>
-      {votes.map((vote) => (
-        <div className="media text-muted pt-3">
-          <p className="media-body pb-3 mb-0 small lh-125 border-bottom border-gray">
-            <Link to={`/votes/${vote.voteId}`}>
-              <strong className="d-block text-gray-dark">
-                {vote.poll.title}
-              </strong>
-            </Link>
-            <p>Option: {vote.option.description}</p>
-            <p>By: {vote.voter.address}</p>
-          </p>
-        </div>
-      ))}
+    <div>
+      <h2 className="border-bottom">Recent Votes</h2>
+      <Table striped bordered hover>
+        <thead>
+          <tr>
+            <th>Poll</th>
+            <th>Option</th>
+            <th>Voter</th>
+          </tr>
+        </thead>
+        <tbody>
+          {votes.map((vote) => (
+            <tr key={vote.voteId}>
+              <td>{vote.poll.title}</td>
+              <td>{vote.option.description}</td>
+              <td>{vote.voter.address}</td>
+            </tr>
+          ))}
+        </tbody>
+      </Table>
     </div>
   );
 };

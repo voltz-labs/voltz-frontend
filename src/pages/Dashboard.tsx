@@ -22,7 +22,7 @@ export interface QueryDashboard {
       options: {
         optionId: string;
         description: string;
-      };
+      }[];
     }[];
   };
   votes: {
@@ -96,7 +96,7 @@ export const Dashboard = () => {
   return (
     <div>
       <Navbar />
-      <Container className="px-4 py-5">
+      <Container className="py-5">
         {user ? (
           <div className="d-none">
             <h1 className="pb-2 mb-3 border-bottom">Voltz Demo</h1>

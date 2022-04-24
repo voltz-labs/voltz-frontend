@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { Container } from "react-bootstrap";
 import { parseError } from "../functions/parseError";
 
 export interface FallbackErrorProps {
@@ -15,7 +16,7 @@ export const FallbackError = ({ errors }: FallbackErrorProps) => {
   }, [errors]);
 
   return (
-    <div>
+    <Container>
       <h1>Ooops...</h1>
       <p>The page you are looking for has an error.</p>
 
@@ -32,6 +33,6 @@ export const FallbackError = ({ errors }: FallbackErrorProps) => {
       ) : (
         <p>No content returned from API.</p>
       )}
-    </div>
+    </Container>
   );
 };

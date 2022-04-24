@@ -1,3 +1,4 @@
+import { Table } from "react-bootstrap";
 import { Link } from "react-router-dom";
 
 export interface RecentPollsProps {
@@ -11,24 +12,38 @@ export interface RecentPollsProps {
     options: {
       optionId: string;
       description: string;
-    };
+    }[];
   }[];
 }
 
 export const RecentPolls = ({ polls }: RecentPollsProps) => {
   return (
-    <div className="my-3 p-3 bg-white rounded box-shadow">
-      <h6 className="border-bottom border-gray pb-2 mb-0">Recent polls</h6>
-      {polls.map((poll) => (
-        <div className="media text-muted pt-3">
-          <p className="media-body pb-3 mb-0 small lh-125 border-bottom border-gray">
-            <Link to={`/polls/${poll.pollId}`}>
-              <strong className="d-block text-gray-dark">{poll.title}</strong>
-            </Link>
-            {poll.description}
-          </p>
-        </div>
-      ))}
+    <div>
+      <h2 className="border-bottom">Recent Polls</h2>
+      <Table striped bordered hover>
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Options</th>
+            <th>Creator</th>
+          </tr>
+        </thead>
+        <tbody>
+          {polls.map((poll) => (
+            <tr key={poll.pollId}>
+              <td>
+                <Link to={`/polls/${poll.pollId}`}>{poll.title}</Link>
+              </td>
+              <td>{poll.description}</td>
+              <td>
+                {poll.options.map((option) => option.description).join(" · ")}
+              </td>
+              <td>{poll.creator.address}</td>
+            </tr>
+          ))}
+        </tbody>
+      </Table>
     </div>
   );
 };

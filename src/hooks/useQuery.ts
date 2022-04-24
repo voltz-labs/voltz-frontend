@@ -74,6 +74,11 @@ export const useQuery = <
         data,
         errors,
       });
+    } catch (err) {
+      setFields({
+        data: null,
+        errors: [err as Error],
+      });
     } finally {
       setLoading(false);
     }
