@@ -6,28 +6,64 @@ import {
   Button,
 } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import { gql } from "../functions/gql";
+import { graphql } from "../functions/graphql";
 import { useAuth } from "../hooks/useAuth";
+import { useHandler } from "../hooks/useHandler";
+import { GraphQLError } from "../pages/GraphQLError";
 import { wallet } from "../utils/wallet";
+
+export interface MutationUserConnect {}
+
+export interface MutationUserConnectVariables {}
+
+export const MUTATION_USER_CONNECT = gql`
+  mutation ($input: UserConnectInput!) {
+    userConnect(input: $input) {
+      address
+      publicKey
+    }
+  }
+`;
 
 export const Navbar = () => {
   const { user, setUser } = useAuth();
 
-  const connectWallet = async () => {
+  const { handler } = useHandler();
+
+  const connectWallet = handler(async () => {
     const permissions = await wallet.client.requestPermissions();
 
     if (permissions) {
+      const { errors } = await graphql<
+        MutationUserConnect,
+        MutationUserConnectVariables
+      >({
+        query: MUTATION_USER_CONNECT,
+        variables: {
+          input: {
+            address: permissions.address,
+            publicKey: permissions.publicKey,
+          },
+        },
+      });
+
+      if (errors) {
+        throw new GraphQLError("Failed to connect wallet", errors);
+      }
+
       setUser({
         address: permissions.address,
         publicKey: permissions.publicKey,
       });
     }
-  };
+  });
 
-  const disconnectWallet = async () => {
+  const disconnectWallet = handler(async () => {
     setUser(null);
 
     await wallet.clearActiveAccount();
-  };
+  });
 
   return (
     <BSNavbar bg="light" variant="light" className="text-light">
