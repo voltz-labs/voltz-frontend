@@ -78,7 +78,8 @@
   },
   "scripts": {
     "build": "node scripts/build.js",
-    "dev": "BROWSER=none node scripts/start.js"
+    "dev": "BROWSER=none node scripts/start.js",
+    "docker": "./scripts/docker"
   },
   "eslintConfig": {
     "extends": [
