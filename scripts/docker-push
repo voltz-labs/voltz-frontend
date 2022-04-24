@@ -8,7 +8,6 @@ script_dir="$(realpath "$(dirname "$0")")"
 root_dir="$(realpath "$script_dir/..")"
 
 env_production="$root_dir/.env"
-env_development="$root_dir/.env.development"
 
 usage() {
   echo "$script_name: usage: $script_name" >&2
@@ -23,8 +22,6 @@ exit_with_error() {
 push_images() {
   (
     cd "$1" || exit_with_error "failed to access directory \"$1\""
-    docker push "$2:latest-dev"
-    docker push "$2:$3-dev"
     docker push "$2:latest"
     docker push "$2:$3"
   )
@@ -32,10 +29,6 @@ push_images() {
 
 if ! [ -r "$env_production" ]; then
   exit_with_error "failed to read .env file"
-fi
-
-if ! [ -r "$env_development" ]; then
-  exit_with_error "failed to read .env.development file"
 fi
 
 docker_image="$(grep -E "^DOCKER_IMAGE=" .env | sed -E 's/^DOCKER_IMAGE=([^\s]*)/\1/')"
