@@ -8,6 +8,7 @@ import { wallet } from "./utils/wallet";
 import { Loading } from "./pages/Loading";
 import { CreatePoll } from "./pages/CreatePoll";
 import { Poll } from "./pages/Poll";
+import { Vote } from "./pages/Vote";
 
 export const Router = () => {
   const { loading, user, setUser } = useAuth();
@@ -37,6 +38,7 @@ export const Router = () => {
                 />
                 <Route path="/polls/new" element={<CreatePoll user={user} />} />
                 <Route path="/polls/:pollId" element={<Poll user={user} />} />
+                <Route path="/votes/:voteId" element={<Vote />} />
               </>
             ) : (
               <Route path="/profile" element={<Navigate to="/" />} />

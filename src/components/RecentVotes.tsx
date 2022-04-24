@@ -1,4 +1,5 @@
 import { Table } from "react-bootstrap";
+import { Link } from "react-router-dom";
 
 export interface RecentVotesProps {
   votes: {
@@ -30,7 +31,9 @@ export const RecentVotes = ({ votes }: RecentVotesProps) => {
         <tbody>
           {votes.map((vote) => (
             <tr key={vote.voteId}>
-              <td>{vote.poll.title}</td>
+              <td>
+                <Link to={`/votes/${vote.voteId}`}>{vote.poll.title}</Link>
+              </td>
               <td>{vote.option.description}</td>
               <td>{vote.voter.address}</td>
             </tr>
