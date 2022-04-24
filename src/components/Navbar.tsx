@@ -42,6 +42,15 @@ export const Navbar = () => {
           />{" "}
           Voltz
         </BSNavbar.Brand>
+
+        <BSNavbar.Toggle aria-controls="basic-navbar-nav" />
+        <BSNavbar.Collapse id="basic-navbar-nav">
+          <Nav className="me-auto">
+            <Nav.Link as={Link} to="/polls/new">
+              New Poll
+            </Nav.Link>
+          </Nav>
+        </BSNavbar.Collapse>
         <Nav>
           {user ? (
             <NavDropdown
@@ -49,8 +58,8 @@ export const Navbar = () => {
                 <img
                   alt="Avatar"
                   src={`https://services.tzkt.io/v1/avatars/${user.address}`}
-                  width="40"
-                  height="40"
+                  width="30"
+                  height="30"
                   className="rounded-circle"
                 />
               }
