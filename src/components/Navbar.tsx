@@ -12,6 +12,7 @@ import { useAuth } from "../hooks/useAuth";
 import { useHandler } from "../hooks/useHandler";
 import { GraphQLError } from "../utils/GraphQLError";
 import { wallet } from "../utils/wallet";
+import { getTezosBalance } from "../functions/getTezosBalance";
 
 export interface MutationUserConnect {}
 
@@ -52,9 +53,12 @@ export const Navbar = () => {
         throw new GraphQLError("Failed to connect wallet", errors);
       }
 
+      const balance = await getTezosBalance(permissions.address);
+
       setUser({
         address: permissions.address,
         publicKey: permissions.publicKey,
+        balance,
       });
     }
   });

@@ -25,6 +25,8 @@ export const Profile = ({ user, onDisconnect }: ProfileProps) => {
             <p>{user.address}</p>
             <p className="text-muted mb-1">Public Key</p>
             <p className="font-size-sm">{user.publicKey}</p>
+            <p className="text-muted mb-1">Balance</p>
+            <p className="font-size-sm">{user.balance}</p>
             <Button variant="primary" onClick={() => onDisconnect()}>
               Disconnect
             </Button>

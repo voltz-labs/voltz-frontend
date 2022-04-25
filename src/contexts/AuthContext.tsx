@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { getTezosBalance } from "../functions/getTezosBalance";
 import { UserProps } from "../models/User";
 import { LOCAL_STORAGE_USER_KEY } from "../utils/constants";
 
@@ -45,6 +46,14 @@ export const AuthContextProvider = ({
 
         if (user) {
           setUser(user);
+
+          // update balance
+          getTezosBalance(user.address).then((balance) => {
+            setUser({
+              ...user,
+              balance,
+            });
+          });
         } else {
           setUser(null);
         }

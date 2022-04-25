@@ -191,6 +191,10 @@ export const CreatePoll = ({ user }: CreatePollProps) => {
                 }))
               }
             />
+            <Form.Text className="text-muted">
+              The minimal amount in Tezos (ꜩ) required to cast a vote, 0 to
+              allow anyone.
+            </Form.Text>
           </Form.Group>
           <div className="mb-4">
             <h3 className="border-bottom">Options</h3>
