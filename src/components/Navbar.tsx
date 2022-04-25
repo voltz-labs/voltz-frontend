@@ -10,7 +10,7 @@ import { gql } from "../functions/gql";
 import { graphql } from "../functions/graphql";
 import { useAuth } from "../hooks/useAuth";
 import { useHandler } from "../hooks/useHandler";
-import { GraphQLError } from "../pages/GraphQLError";
+import { GraphQLError } from "../utils/GraphQLError";
 import { wallet } from "../utils/wallet";
 
 export interface MutationUserConnect {}

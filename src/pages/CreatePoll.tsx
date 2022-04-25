@@ -15,7 +15,7 @@ import { wallet } from "../utils/wallet";
 import { SigningType } from "@airgap/beacon-sdk";
 import { useSubmit } from "../hooks/useSubmit";
 import { useSuccess } from "../hooks/useSuccess";
-import { GraphQLError } from "./GraphQLError";
+import { GraphQLError } from "../utils/GraphQLError";
 import { useRouter } from "../hooks/useRouter";
 
 export interface MutationCreatePoll {
@@ -32,6 +32,7 @@ export interface MutationCreatePollVariables {
     creatorAddress: string;
     payload: string;
     signature: string;
+    minimalBalanceRequiredToVote: number;
     options: {
       optionId: string;
       description: string;
@@ -55,6 +56,7 @@ export const CreatePoll = ({ user }: CreatePollProps) => {
   const [fields, setFields] = useState({
     title: "",
     description: "",
+    minimalBalanceRequiredToVote: 0,
     options: [
       {
         description: "",
@@ -81,6 +83,7 @@ export const CreatePoll = ({ user }: CreatePollProps) => {
       title: fields.title,
       description: fields.description,
       creatorAddress: user.address,
+      minimalBalanceRequiredToVote: fields.minimalBalanceRequiredToVote,
       options,
     };
 
@@ -165,6 +168,26 @@ export const CreatePoll = ({ user }: CreatePollProps) => {
                 setFields((fields) => ({
                   ...fields,
                   description: e.target.value,
+                }))
+              }
+            />
+          </Form.Group>
+          <Form.Group className="mb-3">
+            <Form.Label htmlFor="minimalBalanceRequiredToVote">
+              Minimal Balance
+            </Form.Label>
+            <Form.Control
+              id="minimalBalanceRequiredToVote"
+              name="minimalBalanceRequiredToVote"
+              type="number"
+              placeholder="0.0"
+              step="0.000001"
+              min="0"
+              value={fields.minimalBalanceRequiredToVote}
+              onChange={(e) =>
+                setFields((fields) => ({
+                  ...fields,
+                  minimalBalanceRequiredToVote: +e.target.value,
                 }))
               }
             />

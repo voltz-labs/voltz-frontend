@@ -17,7 +17,7 @@ import { SigningType } from "@airgap/beacon-sdk";
 import { graphql } from "../functions/graphql";
 import { useState } from "react";
 import { useSubmit } from "../hooks/useSubmit";
-import { GraphQLError } from "./GraphQLError";
+import { GraphQLError } from "../utils/GraphQLError";
 import { useSuccess } from "../hooks/useSuccess";
 
 export interface MutationVoteCreate {
