@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, Container, Form } from "react-bootstrap";
 import { Navbar } from "../components/Navbar";
 import { convertNumberToHex } from "../functions/convertNumberToHex";
@@ -17,6 +17,9 @@ import { useSubmit } from "../hooks/useSubmit";
 import { useSuccess } from "../hooks/useSuccess";
 import { GraphQLError } from "../utils/GraphQLError";
 import { useRouter } from "../hooks/useRouter";
+import { fetchCurrentBlockQuote } from "../functions/fetchCurrentBlockQuote";
+import { parseDateToDateTimeLocalValue } from "../functions/parseDateToDateTimeLocalValue";
+import { parseDateTimeLocalValueToDate } from "../functions/parseDateTimeLocalValueToDate";
 
 export interface MutationCreatePoll {
   pollCreate: {
@@ -33,6 +36,8 @@ export interface MutationCreatePollVariables {
     payload: string;
     signature: string;
     minimalBalanceRequiredToVote: number;
+    expirationDate: Date | null;
+    expirationBlockQuote: number | null;
     options: {
       optionId: string;
       description: string;
@@ -57,6 +62,8 @@ export const CreatePoll = ({ user }: CreatePollProps) => {
     title: "",
     description: "",
     minimalBalanceRequiredToVote: 0,
+    expirationDate: null as Date | null,
+    expirationBlockQuote: null as number | null,
     options: [
       {
         description: "",
@@ -64,11 +71,30 @@ export const CreatePoll = ({ user }: CreatePollProps) => {
     ],
   });
 
+  const [currentBlockQuote, setCurrentBlockQuote] = useState<number | null>(
+    null
+  );
+
   const { loading: submitLoading, submit } = useSubmit();
 
   const { createSuccess } = useSuccess();
 
   const router = useRouter();
+
+  useEffect(() => {
+    const interval = setInterval(
+      (function fn() {
+        fetchCurrentBlockQuote().then((blockQuote) =>
+          setCurrentBlockQuote(blockQuote)
+        );
+
+        return fn;
+      })(),
+      5000
+    );
+
+    return () => clearInterval(interval);
+  }, []);
 
   const onSubmit = submit(async () => {
     const pollId = nanoid();
@@ -84,6 +110,8 @@ export const CreatePoll = ({ user }: CreatePollProps) => {
       description: fields.description,
       creatorAddress: user.address,
       minimalBalanceRequiredToVote: fields.minimalBalanceRequiredToVote,
+      expirationDate: fields.expirationDate,
+      expirationBlockQuote: fields.expirationBlockQuote,
       options,
     };
 
@@ -194,6 +222,54 @@ export const CreatePoll = ({ user }: CreatePollProps) => {
             <Form.Text className="text-muted">
               The minimal amount in Tezos (ꜩ) required to cast a vote, 0 to
               allow anyone.
+            </Form.Text>
+          </Form.Group>
+          <Form.Group className="mb-3">
+            <Form.Label htmlFor="expirationDate">Expires at</Form.Label>
+            <Form.Control
+              id="expirationDate"
+              name="expirationDate"
+              type="datetime-local"
+              value={parseDateToDateTimeLocalValue(fields.expirationDate)}
+              onChange={(event) =>
+                setFields((fields) => ({
+                  ...fields,
+                  expirationDate: parseDateTimeLocalValueToDate(
+                    event.target.value
+                  ),
+                }))
+              }
+            />
+            <Form.Text className="text-muted">
+              The max date to allow votes to be cast, leave it blank for no
+              expiration.
+            </Form.Text>
+          </Form.Group>
+          <Form.Group className="mb-3">
+            <Form.Label htmlFor="expirationBlockQuote">
+              Expires at Block Quote
+              {currentBlockQuote && ` (Current ${currentBlockQuote})`}
+            </Form.Label>
+            <Form.Control
+              id="expirationBlockQuote"
+              name="expirationBlockQuote"
+              type="number"
+              placeholder="0"
+              step="1"
+              min="0"
+              value={fields.expirationBlockQuote || 0}
+              onChange={(e) =>
+                setFields((fields) => ({
+                  ...fields,
+                  expirationBlockQuote: +e.target.value
+                    ? +e.target.value
+                    : null,
+                }))
+              }
+            />
+            <Form.Text className="text-muted">
+              The max block quote level allowed to votes to be casted, leave it
+              0 to no expiration.
             </Form.Text>
           </Form.Group>
           <div className="mb-4">
