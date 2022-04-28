@@ -13,6 +13,7 @@ export interface RecentPollsProps {
       optionId: string;
       description: string;
     }[];
+    expired: boolean;
   }[];
 }
 
@@ -20,13 +21,14 @@ export const RecentPolls = ({ polls }: RecentPollsProps) => {
   return (
     <div>
       <h2 className="border-bottom">Recent Polls</h2>
-      <Table striped bordered hover>
+      <Table striped bordered hover responsive>
         <thead>
           <tr>
             <th>Title</th>
             <th>Description</th>
             <th>Options</th>
             <th>Creator</th>
+            <th>Status</th>
           </tr>
         </thead>
         <tbody>
@@ -40,6 +42,13 @@ export const RecentPolls = ({ polls }: RecentPollsProps) => {
                 {poll.options.map((option) => option.description).join(" · ")}
               </td>
               <td>{poll.creator.address}</td>
+              <td>
+                {poll.expired ? (
+                  <span className="badge bg-danger">Closed</span>
+                ) : (
+                  <span className="badge bg-success">Open</span>
+                )}
+              </td>
             </tr>
           ))}
         </tbody>

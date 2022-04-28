@@ -23,6 +23,7 @@ export interface QueryDashboard {
         optionId: string;
         description: string;
       }[];
+      expired: boolean;
     }[];
   };
   votes: {
@@ -55,6 +56,7 @@ export const QUERY_DASHBOARD = gql`
           optionId
           description
         }
+        expired
       }
     }
     votes {
