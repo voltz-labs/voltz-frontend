@@ -1,4 +1,4 @@
-import { Button, Container, Form } from "react-bootstrap";
+import { Button, Form } from "react-bootstrap";
 import { Fallback } from "../components/Fallback";
 import { Navbar } from "../components/Navbar";
 import { convertNumberToHex } from "../functions/convertNumberToHex";
@@ -20,6 +20,7 @@ import { useSubmit } from "../hooks/useSubmit";
 import { GraphQLError } from "../utils/GraphQLError";
 import { useSuccess } from "../hooks/useSuccess";
 import { downloadAsJson } from "../functions/downloadAsJson";
+import { Page } from "../components/Page";
 
 export interface MutationVoteCreate {
   voteCreate: {
@@ -188,40 +189,37 @@ export const Poll = ({ user }: PollProps) => {
   });
 
   return (
-    <div>
-      <Navbar />
-      <Container className="py-5">
-        <h2 className="border-bottom mb-2">{poll.title}</h2>
-        <Form onSubmit={onSubmit()}>
-          <section>
-            <strong>Description:</strong>
-            <p>{poll.description}</p>
-          </section>
-          <section>
-            <strong>Options:</strong>
-            <ul>
-              {poll.options.map((option) => (
-                <li key={option.optionId}>
-                  <Form.Check
-                    type="radio"
-                    id={`option-${option.optionId}`}
-                    name="optionId"
-                    value={option.optionId}
-                    label={option.description}
-                    checked={selectedOption === option.optionId}
-                    onChange={(e) =>
-                      e.target.checked && setSelectedOption(option.optionId)
-                    }
-                  />
-                </li>
-              ))}
-            </ul>
-          </section>
-          <Button variant="primary" type="submit" disabled={submitLoading}>
-            Vote
-          </Button>
-        </Form>
-      </Container>
-    </div>
+    <Page title="Poll">
+      <h2 className="border-bottom mb-2">{poll.title}</h2>
+      <Form onSubmit={onSubmit()}>
+        <section>
+          <strong>Description:</strong>
+          <p>{poll.description}</p>
+        </section>
+        <section>
+          <strong>Options:</strong>
+          <ul>
+            {poll.options.map((option) => (
+              <li key={option.optionId}>
+                <Form.Check
+                  type="radio"
+                  id={`option-${option.optionId}`}
+                  name="optionId"
+                  value={option.optionId}
+                  label={option.description}
+                  checked={selectedOption === option.optionId}
+                  onChange={(e) =>
+                    e.target.checked && setSelectedOption(option.optionId)
+                  }
+                />
+              </li>
+            ))}
+          </ul>
+        </section>
+        <Button variant="primary" type="submit" disabled={submitLoading}>
+          Vote
+        </Button>
+      </Form>
+    </Page>
   );
 };

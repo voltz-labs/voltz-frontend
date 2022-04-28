@@ -1,3 +1,5 @@
+import { Page } from "../components/Page";
+
 export const NotFound = () => {
-  return <div>Not Found</div>;
+  return <Page title="Not Found">Not Found</Page>;
 };

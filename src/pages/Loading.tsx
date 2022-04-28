@@ -1,11 +1,5 @@
-import { Navbar } from "../components/Navbar";
-import { Loading as LoadingComponent } from "../components/Loading";
+import { Page } from "../components/Page";
 
 export const Loading = () => {
-  return (
-    <div>
-      <Navbar />
-      <LoadingComponent />
-    </div>
-  );
+  return <Page title="Loading">Loading...</Page>;
 };

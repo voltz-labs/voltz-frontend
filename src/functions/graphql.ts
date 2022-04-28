@@ -20,8 +20,6 @@ export const graphql = async <
   variables,
   headers,
 }: GraphQLProps<Variables>): Promise<GraphQLResult<T>> => {
-  console.log(API_URL);
-
   const url = new URL(API_URL);
 
   url.pathname = "/graphql";

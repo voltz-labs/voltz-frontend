@@ -1,4 +1,4 @@
-import { Button, Container, Form } from "react-bootstrap";
+import { Button, Form } from "react-bootstrap";
 import { Fallback } from "../components/Fallback";
 import { Navbar } from "../components/Navbar";
 import { convertHexToString } from "../functions/convertHexToString";
@@ -8,6 +8,7 @@ import { useRouter } from "../hooks/useRouter";
 import { useSubmit } from "../hooks/useSubmit";
 import { verifySignature } from "@taquito/utils";
 import { useState } from "react";
+import { Page } from "../components/Page";
 
 export interface QueryVote {
   vote: {
@@ -111,101 +112,97 @@ export const Vote = () => {
   });
 
   return (
-    <div>
-      <Navbar />
+    <Page title="Vote">
+      <Form onSubmit={verifyPayload()}>
+        <Form.Group className="mb-3">
+          <Form.Label htmlFor="poll">Poll Title</Form.Label>
+          <Form.Control
+            id="poll"
+            name="poll"
+            type="text"
+            placeholder="Poll Title..."
+            value={vote.poll.title}
+            readOnly
+          />
+        </Form.Group>
+        <Form.Group className="mb-3">
+          <Form.Label htmlFor="option">Option</Form.Label>
+          <Form.Control
+            id="option"
+            name="option"
+            type="text"
+            placeholder="Option..."
+            value={vote.option.description}
+            readOnly
+          />
+        </Form.Group>
+        <Form.Group className="mb-3">
+          <Form.Label htmlFor="voter">Voter</Form.Label>
+          <Form.Control
+            id="voter"
+            name="voter"
+            type="text"
+            placeholder="Voter..."
+            value={vote.voter.address}
+            readOnly
+          />
+        </Form.Group>
+        <Form.Group className="mb-3">
+          <Form.Label htmlFor="publicKey">Voter Public Key</Form.Label>
+          <Form.Control
+            id="publicKey"
+            name="publicKey"
+            type="text"
+            placeholder="Voter Public Key..."
+            value={vote.voter.publicKey}
+            readOnly
+          />
+        </Form.Group>
+        <Form.Group className="mb-3">
+          <Form.Label htmlFor="payload">Payload</Form.Label>
+          <Form.Control
+            id="payload"
+            name="payload"
+            type="text"
+            placeholder="Payload..."
+            value={vote.payload}
+            readOnly
+          />
+          <Form.Text className="text-muted">
+            {/^([0-9a-f]{2})+$/.test(vote.payload.slice(12))
+              ? ` Decoded: ${convertHexToString(vote.payload.slice(12))}`
+              : ""}
+          </Form.Text>
+        </Form.Group>
+        <Form.Group className="mb-3">
+          <Form.Label htmlFor="signature">Signature</Form.Label>
+          <Form.Control
+            id="signature"
+            name="signature"
+            type="text"
+            placeholder="Signature..."
+            value={vote.signature}
+            readOnly
+          />
+        </Form.Group>
 
-      <Container className="py-5">
-        <Form onSubmit={verifyPayload()}>
-          <Form.Group className="mb-3">
-            <Form.Label htmlFor="poll">Poll Title</Form.Label>
-            <Form.Control
-              id="poll"
-              name="poll"
-              type="text"
-              placeholder="Poll Title..."
-              value={vote.poll.title}
-              readOnly
-            />
-          </Form.Group>
-          <Form.Group className="mb-3">
-            <Form.Label htmlFor="option">Option</Form.Label>
-            <Form.Control
-              id="option"
-              name="option"
-              type="text"
-              placeholder="Option..."
-              value={vote.option.description}
-              readOnly
-            />
-          </Form.Group>
-          <Form.Group className="mb-3">
-            <Form.Label htmlFor="voter">Voter</Form.Label>
-            <Form.Control
-              id="voter"
-              name="voter"
-              type="text"
-              placeholder="Voter..."
-              value={vote.voter.address}
-              readOnly
-            />
-          </Form.Group>
-          <Form.Group className="mb-3">
-            <Form.Label htmlFor="publicKey">Voter Public Key</Form.Label>
-            <Form.Control
-              id="publicKey"
-              name="publicKey"
-              type="text"
-              placeholder="Voter Public Key..."
-              value={vote.voter.publicKey}
-              readOnly
-            />
-          </Form.Group>
-          <Form.Group className="mb-3">
-            <Form.Label htmlFor="payload">Payload</Form.Label>
-            <Form.Control
-              id="payload"
-              name="payload"
-              type="text"
-              placeholder="Payload..."
-              value={vote.payload}
-              readOnly
-            />
-            <Form.Text className="text-muted">
-              {/^([0-9a-f]{2})+$/.test(vote.payload.slice(12))
-                ? ` Decoded: ${convertHexToString(vote.payload.slice(12))}`
-                : ""}
-            </Form.Text>
-          </Form.Group>
-          <Form.Group className="mb-3">
-            <Form.Label htmlFor="signature">Signature</Form.Label>
-            <Form.Control
-              id="signature"
-              name="signature"
-              type="text"
-              placeholder="Signature..."
-              value={vote.signature}
-              readOnly
-            />
-          </Form.Group>
-
-          <Button variant="primary" type="submit" disabled={submitLoading}>
-            Verify Signature
-          </Button>
-        </Form>
-        {result ? (
-          <div className="my-3 p-3 bg-body rounded shadow-sm">
-            <h6 className="border-bottom pb-2 mb-0">Result</h6>
-            <div className="d-flex text-muted pt-3">
-              <div className="pb-3 mb-0 small lh-sm w-100">
-                <strong className="text-gray-dark">Verified?</strong>
-                <span className="d-block text-break">
-                  {result.verified ? "Valid" : "Invalid"}
-                </span>
-              </div>
+        <Button variant="primary" type="submit" disabled={submitLoading}>
+          Verify Signature
+        </Button>
+      </Form>
+      {result ? (
+        <div className="my-3 p-3 bg-body rounded shadow-sm">
+          <h6 className="border-bottom pb-2 mb-0">Result</h6>
+          <div className="d-flex text-muted pt-3">
+            <div className="pb-3 mb-0 small lh-sm w-100">
+              <strong className="text-gray-dark">Verified?</strong>
+              <span className="d-block text-break">
+                {result.verified ? "Valid" : "Invalid"}
+              </span>
             </div>
           </div>
-        ) : null}
-      </Container>
-    </div>
+        </div>
+      ) : null}
+    </Page>
   );
 };

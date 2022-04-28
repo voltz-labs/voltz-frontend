@@ -1,5 +1,4 @@
 import { FallbackError } from "./FallbackError";
-import { Loading } from "./Loading";
 
 export interface FallbackProps {
   loading: boolean;
@@ -8,7 +7,7 @@ export interface FallbackProps {
 
 export const Fallback = ({ loading, errors }: FallbackProps) => {
   if (loading) {
-    return <Loading />;
+    return <span>Loading...</span>;
   }
 
   return <FallbackError errors={errors} />;
