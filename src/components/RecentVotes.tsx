@@ -20,7 +20,7 @@ export const RecentVotes = ({ votes }: RecentVotesProps) => {
   return (
     <div>
       <h2 className="border-bottom">Recent Votes</h2>
-      <Table striped bordered hover>
+      <Table striped bordered hover responsive>
         <thead>
           <tr>
             <th>Poll</th>
