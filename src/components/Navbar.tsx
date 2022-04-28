@@ -70,7 +70,7 @@ export const Navbar = () => {
   });
 
   return (
-    <BSNavbar bg="light" variant="light" className="text-light">
+    <BSNavbar bg="primary" variant="dark" className="text-light">
       <Container>
         <BSNavbar.Brand as={Link} to="/">
           <img
