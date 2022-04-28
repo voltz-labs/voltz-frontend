@@ -19,6 +19,7 @@ import { useState } from "react";
 import { useSubmit } from "../hooks/useSubmit";
 import { GraphQLError } from "../utils/GraphQLError";
 import { useSuccess } from "../hooks/useSuccess";
+import { downloadAsJson } from "../functions/downloadAsJson";
 
 export interface MutationVoteCreate {
   voteCreate: {
@@ -173,6 +174,12 @@ export const Poll = ({ user }: PollProps) => {
     createSuccess({
       message: `Vote "${data.voteCreate.voteId}" cast with success`,
       onClose: async () => {
+        downloadAsJson(data.voteCreate.voteId + ".json", {
+          voteId: data.voteCreate.voteId,
+          content,
+          payload,
+          signature,
+        });
         router.push({
           path: "/",
         });
