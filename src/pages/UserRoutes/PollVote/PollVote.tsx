@@ -106,24 +106,38 @@ export const PollVote = () => {
               (result) => result.optionId === option.optionId
             );
 
-            let percentage: number;
+            let perVote: number;
             let voteNumber: number;
+
             if (poll.results.voteCount > 0) {
               voteNumber = optionResult?.voteCount || 0;
-              percentage = voteNumber / poll.results.voteCount;
+              perVote = voteNumber / poll.results.voteCount;
             } else {
               voteNumber = 0;
-              percentage = 0;
+              perVote = 0;
+            }
+
+            let perBalance;
+            let voteBalance: number;
+
+            if (poll.results.voteBalance > 0) {
+              voteBalance = optionResult?.voteBalance || 0;
+              perBalance = voteBalance / poll.results.voteBalance;
+            } else {
+              voteBalance = 0;
+              perBalance = 0;
             }
 
             return (
               <li key={option.optionId}>
                 {option.description}
-                {poll.votedOption?.optionId === option.optionId ? "✓" : ""}
+                {poll.votedOption?.optionId === option.optionId ? " ✓ " : ""}
                 {optionResult
-                  ? ` ${percentage * 100}% (${voteNumber} vote${
-                      voteNumber === 1 ? "" : "s"
-                    })`
+                  ? poll.pollType === "USER_VOTES"
+                    ? ` ${perVote * 100}% (${voteNumber} vote${
+                        voteNumber === 1 ? "" : "s"
+                      })`
+                    : ` ${perBalance * 100}% (${voteBalance} tezos)`
                   : ""}
               </li>
             );

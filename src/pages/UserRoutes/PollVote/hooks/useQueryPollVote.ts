@@ -1,9 +1,11 @@
+import { PollType } from "../../../../@types/PollType";
 import { gql } from "../../../../functions/gql";
 import { useQuery } from "../../../../hooks/useQuery";
 
 export interface PollVoteQuery {
   poll: {
     pollId: string;
+    pollType: PollType;
     title: string;
     description: string;
     creatorAddress: string;
@@ -23,9 +25,11 @@ export interface PollVoteQuery {
     } | null;
     results: {
       voteCount: number;
+      voteBalance: number;
       voteResults: {
         optionId: string;
         voteCount: number;
+        voteBalance: number;
       }[];
     };
   };
@@ -44,6 +48,7 @@ export const POLL_QUERY = gql`
   query ($id: PollID!, $input: VotedOptionInput!) {
     poll(id: $id) {
       pollId
+      pollType
       title
       description
       creatorAddress
@@ -63,9 +68,11 @@ export const POLL_QUERY = gql`
       }
       results {
         voteCount
+        voteBalance
         voteResults {
           optionId
           voteCount
+          voteBalance
         }
       }
     }
