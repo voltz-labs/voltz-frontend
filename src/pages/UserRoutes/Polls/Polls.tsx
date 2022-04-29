@@ -45,6 +45,7 @@ export const Polls = () => {
             <th>Title</th>
             <th>Creator</th>
             <th>Status</th>
+            <th>Type</th>
             <th className="text-end">Minimal Balance</th>
             <th className="text-end">Expiration Date</th>
             <th className="text-end">Expiration Block Quote</th>
@@ -63,6 +64,7 @@ export const Polls = () => {
                   <span className="badge bg-success">Open</span>
                 )}
               </td>
+              <td>{poll.pollType === "USER_BALANCE" ? "Balance" : "Vote"}</td>
               <td className="text-end">
                 <span>
                   {poll.minimalBalanceRequiredToVote

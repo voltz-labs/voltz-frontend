@@ -1,3 +1,4 @@
+import { PollType } from "../../../@types/PollType";
 import { gql } from "../../../functions/gql";
 import { useQuery } from "../../../hooks/useQuery";
 
@@ -16,6 +17,7 @@ export interface GraphQLQueryDashboard {
         description: string;
       }[];
       expired: boolean;
+      pollType: PollType;
     }[];
   };
   votes: {
@@ -49,6 +51,7 @@ export const GRAPHQL_QUERY_DASHBOARD = gql`
           description
         }
         expired
+        pollType
       }
     }
     votes {

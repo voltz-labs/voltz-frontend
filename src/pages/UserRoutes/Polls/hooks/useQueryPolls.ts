@@ -1,3 +1,4 @@
+import { PollType } from "../../../../@types/PollType";
 import { gql } from "../../../../functions/gql";
 import { useQuery } from "../../../../hooks/useQuery";
 
@@ -18,6 +19,7 @@ export interface GraphQLQueryPolls {
       expired: boolean;
       expirationDate: Date;
       expirationBlockQuote: number;
+      pollType: PollType;
     }[];
   };
 }
@@ -40,6 +42,7 @@ export const GRAPHQL_QUERY_POLLS = gql`
         expired
         expirationDate
         expirationBlockQuote
+        pollType
       }
     }
   }

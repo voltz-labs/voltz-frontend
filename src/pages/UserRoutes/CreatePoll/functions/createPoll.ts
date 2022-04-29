@@ -1,3 +1,4 @@
+import { PollType } from "../../../../@types/PollType";
 import { gql } from "../../../../functions/gql";
 import { graphql } from "../../../../functions/graphql";
 
@@ -22,6 +23,7 @@ export interface MutationCreatePollVariables {
       optionId: string;
       description: string;
     }[];
+    pollType: PollType;
   };
 }
 

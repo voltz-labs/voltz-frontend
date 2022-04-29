@@ -1,5 +1,6 @@
 import { Table } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import { PollType } from "../../../@types/PollType";
 
 export interface RecentPollsProps {
   polls: {
@@ -14,6 +15,7 @@ export interface RecentPollsProps {
       description: string;
     }[];
     expired: boolean;
+    pollType: PollType;
   }[];
 }
 
@@ -29,6 +31,7 @@ export const RecentPolls = ({ polls }: RecentPollsProps) => {
             <th>Options</th>
             <th>Creator</th>
             <th>Status</th>
+            <th>Type</th>
           </tr>
         </thead>
         <tbody>
@@ -49,6 +52,7 @@ export const RecentPolls = ({ polls }: RecentPollsProps) => {
                   <span className="badge bg-success">Open</span>
                 )}
               </td>
+              <td>{poll.pollType === "USER_BALANCE" ? "Balance" : "Vote"}</td>
             </tr>
           ))}
         </tbody>

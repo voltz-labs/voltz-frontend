@@ -12,6 +12,7 @@ import { Page } from "../../../components/Page";
 import { useUser } from "../../../hooks/useUser";
 import { createPoll } from "./functions/createPoll";
 import { signContent } from "../../../functions/signContent";
+import { PollType } from "../../../@types/PollType";
 
 interface FieldsOption {
   description: string;
@@ -24,6 +25,7 @@ interface Fields {
   expirationDate: Date | null;
   expirationBlockQuote: number | null;
   options: FieldsOption[];
+  pollType: PollType;
 }
 
 export const CreatePoll = () => {
@@ -38,6 +40,7 @@ export const CreatePoll = () => {
         description: "",
       },
     ],
+    pollType: "USER_VOTES",
   });
 
   const [currentBlockQuote, setCurrentBlockQuote] = useState<number | null>(
@@ -83,6 +86,7 @@ export const CreatePoll = () => {
       minimalBalanceRequiredToVote: fields.minimalBalanceRequiredToVote,
       expirationDate: fields.expirationDate,
       expirationBlockQuote: fields.expirationBlockQuote,
+      pollType: fields.pollType,
       options,
     };
 
@@ -127,6 +131,33 @@ export const CreatePoll = () => {
                 ...fields,
                 title: e.target.value,
               }))
+            }
+          />
+        </Form.Group>
+        <Form.Group className="mb-3">
+          <Form.Label>Poll Couting Vote</Form.Label>
+          <Form.Check
+            type="radio"
+            id="poll-type-user-votes"
+            name="poll-type-user-votes"
+            value={fields.pollType}
+            label="User Vote"
+            checked={fields.pollType === "USER_VOTES"}
+            onChange={(e) =>
+              e.target.checked &&
+              setFields({ ...fields, pollType: "USER_VOTES" })
+            }
+          />
+          <Form.Check
+            type="radio"
+            id="poll-type-user-balance"
+            name="poll-type-user-balance"
+            value={fields.pollType}
+            label="User Balance"
+            checked={fields.pollType === "USER_BALANCE"}
+            onChange={(e) =>
+              e.target.checked &&
+              setFields({ ...fields, pollType: "USER_BALANCE" })
             }
           />
         </Form.Group>
