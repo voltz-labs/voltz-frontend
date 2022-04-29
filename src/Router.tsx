@@ -17,31 +17,29 @@ export const Router = () => {
 
   return (
     <BrowserRouter>
-      {user ? (
+      {loading ? (
+        <Routes>
+          <Route path="*" element={<Loading />} />
+        </Routes>
+      ) : user ? (
         <UserRoutes user={user} setUser={setUser} />
       ) : (
         <Routes>
-          {loading ? (
-            <Route path="*" element={<Loading />} />
-          ) : (
+          <Route path="/" element={<Dashboard />} />
+          {user ? (
             <>
-              <Route path="/" element={<Dashboard />} />
-              {user ? (
-                <>
-                  <Route path="/profile" element={<Profile />} />
-                  <Route path="/polls" element={<Polls />} />
-                  <Route path="/polls/new" element={<CreatePoll />} />
-                  <Route path="/polls/:pollId/vote" element={<PollVote />} />
-                  <Route path="/votes" element={<Votes />} />
-                  <Route path="/votes/:voteId" element={<Vote />} />
-                </>
-              ) : (
-                <Route path="/profile" element={<Navigate to="/" />} />
-              )}
-
-              <Route path="*" element={<NotFound />} />
+              <Route path="/profile" element={<Profile />} />
+              <Route path="/polls" element={<Polls />} />
+              <Route path="/polls/new" element={<CreatePoll />} />
+              <Route path="/polls/:pollId/vote" element={<PollVote />} />
+              <Route path="/votes" element={<Votes />} />
+              <Route path="/votes/:voteId" element={<Vote />} />
             </>
+          ) : (
+            <Route path="/profile" element={<Navigate to="/" />} />
           )}
+
+          <Route path="*" element={<NotFound />} />
         </Routes>
       )}
     </BrowserRouter>

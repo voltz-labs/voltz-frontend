@@ -1,65 +1,33 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Button, Form } from "react-bootstrap";
-import { convertNumberToHex } from "../../functions/convertNumberToHex";
-import { convertStringToHex } from "../../functions/convertStringToHex";
-import { gql } from "../../functions/gql";
-import { graphql } from "../../functions/graphql";
-import { nanoid } from "../../functions/nanoid";
-import { UserProps } from "../../models/User";
-import {
-  BYTE_INDICATOR_HEX_BYTE_STRING,
-  BYTE_INDICATOR_MICHELINE_EXPRESSION,
-} from "../../utils/constants";
-import { wallet } from "../../utils/wallet";
-import { SigningType } from "@airgap/beacon-sdk";
-import { useSubmit } from "../../hooks/useSubmit";
-import { useSuccess } from "../../hooks/useSuccess";
-import { GraphQLError } from "../../utils/GraphQLError";
-import { useRouter } from "../../hooks/useRouter";
-import { fetchCurrentBlockQuote } from "../../functions/fetchCurrentBlockQuote";
-import { parseDateToDateTimeLocalValue } from "../../functions/parseDateToDateTimeLocalValue";
-import { parseDateTimeLocalValueToDate } from "../../functions/parseDateTimeLocalValueToDate";
-import { Page } from "../../components/Page";
-import { useUser } from "../../hooks/useUser";
+import { nanoid } from "../../../functions/nanoid";
+import { useSubmit } from "../../../hooks/useSubmit";
+import { useSuccess } from "../../../hooks/useSuccess";
+import { GraphQLError } from "../../../utils/GraphQLError";
+import { useRouter } from "../../../hooks/useRouter";
+import { fetchCurrentBlockQuote } from "../../../functions/fetchCurrentBlockQuote";
+import { parseDateToDateTimeLocalValue } from "../../../functions/parseDateToDateTimeLocalValue";
+import { parseDateTimeLocalValueToDate } from "../../../functions/parseDateTimeLocalValueToDate";
+import { Page } from "../../../components/Page";
+import { useUser } from "../../../hooks/useUser";
+import { createPoll } from "./functions/createPoll";
+import { signContent } from "../../../functions/signContent";
 
-export interface MutationCreatePoll {
-  pollCreate: {
-    pollId: string;
-  };
+interface FieldsOption {
+  description: string;
 }
 
-export interface MutationCreatePollVariables {
-  input: {
-    pollId: string;
-    title: string;
-    description: string;
-    creatorAddress: string;
-    payload: string;
-    signature: string;
-    minimalBalanceRequiredToVote: number;
-    expirationDate: Date | null;
-    expirationBlockQuote: number | null;
-    options: {
-      optionId: string;
-      description: string;
-    }[];
-  };
-}
-
-export const MUTATION_CREATE_POLL = gql`
-  mutation ($input: PollCreateInput!) {
-    pollCreate(input: $input) {
-      pollId
-    }
-  }
-`;
-
-export interface CreatePollProps {
-  user: UserProps;
+interface Fields {
+  title: string;
+  description: string;
+  minimalBalanceRequiredToVote: number;
+  expirationDate: Date | null;
+  expirationBlockQuote: number | null;
+  options: FieldsOption[];
 }
 
 export const CreatePoll = () => {
-  const [fields, setFields] = useState({
+  const [fields, setFields] = useState<Fields>({
     title: "",
     description: "",
     minimalBalanceRequiredToVote: 0,
@@ -118,35 +86,13 @@ export const CreatePoll = () => {
       options,
     };
 
-    const bytes = convertStringToHex(JSON.stringify(content));
+    const { payload, signature } = await signContent(content, user.address);
 
-    const length = convertNumberToHex(bytes.length);
-
-    const payload =
-      BYTE_INDICATOR_MICHELINE_EXPRESSION +
-      BYTE_INDICATOR_HEX_BYTE_STRING +
-      length +
-      bytes;
-
-    const signedPayload = await wallet.client.requestSignPayload({
-      signingType: SigningType.MICHELINE,
-      payload,
-      sourceAddress: user.address,
-    });
-
-    const signature = signedPayload.signature;
-
-    const { data, errors } = await graphql<
-      MutationCreatePoll,
-      MutationCreatePollVariables
-    >({
-      query: MUTATION_CREATE_POLL,
-      variables: {
-        input: {
-          ...content,
-          payload,
-          signature,
-        },
+    const { data, errors } = await createPoll({
+      input: {
+        ...content,
+        payload,
+        signature,
       },
     });
 
@@ -249,7 +195,8 @@ export const CreatePoll = () => {
         <Form.Group className="mb-3">
           <Form.Label htmlFor="expirationBlockQuote">
             Expires at Block Quote
-            {currentBlockQuote && ` (Current ${currentBlockQuote})`}
+            {currentBlockQuote &&
+              ` (Current ${Intl.NumberFormat().format(currentBlockQuote)})`}
           </Form.Label>
           <Form.Control
             id="expirationBlockQuote"
