@@ -20,6 +20,7 @@ import { fetchCurrentBlockQuote } from "../functions/fetchCurrentBlockQuote";
 import { parseDateToDateTimeLocalValue } from "../functions/parseDateToDateTimeLocalValue";
 import { parseDateTimeLocalValueToDate } from "../functions/parseDateTimeLocalValueToDate";
 import { Page } from "../components/Page";
+import { useUser } from "../hooks/useUser";
 
 export interface MutationCreatePoll {
   pollCreate: {
@@ -57,7 +58,7 @@ export interface CreatePollProps {
   user: UserProps;
 }
 
-export const CreatePoll = ({ user }: CreatePollProps) => {
+export const CreatePoll = () => {
   const [fields, setFields] = useState({
     title: "",
     description: "",
@@ -78,6 +79,8 @@ export const CreatePoll = ({ user }: CreatePollProps) => {
   const { loading: submitLoading, submit } = useSubmit();
 
   const { createSuccess } = useSuccess();
+
+  const { user } = useUser();
 
   const router = useRouter();
 

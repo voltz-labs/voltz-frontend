@@ -2,7 +2,6 @@ import { Button, Form } from "react-bootstrap";
 import { Fallback } from "../../components/Fallback";
 import { nanoid } from "../../functions/nanoid";
 import { useRouter } from "../../hooks/useRouter";
-import { UserProps } from "../../models/User";
 import { useState } from "react";
 import { useSubmit } from "../../hooks/useSubmit";
 import { GraphQLError } from "../../utils/GraphQLError";
@@ -14,12 +13,9 @@ import { PageTitle } from "../../components/PageTitle";
 import { PageTitleText } from "../../components/PageTitleText";
 import { signContent } from "../../functions/signContent";
 import { createVote } from "./functions/createVote";
+import { useUser } from "../../hooks/useUser";
 
-export interface PollProps {
-  user: UserProps;
-}
-
-export const PollVote = ({ user }: PollProps) => {
+export const PollVote = () => {
   const { params } = useRouter();
 
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
@@ -29,6 +25,8 @@ export const PollVote = ({ user }: PollProps) => {
   const { loading: submitLoading, submit } = useSubmit();
 
   const { createSuccess } = useSuccess();
+
+  const { user } = useUser();
 
   const pollId = params.pollId!;
 

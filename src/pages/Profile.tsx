@@ -1,13 +1,17 @@
 import { Button } from "react-bootstrap";
 import { Page } from "../components/Page";
-import { UserProps } from "../models/User";
+import { useHandler } from "../hooks/useHandler";
+import { useUser } from "../hooks/useUser";
 
-export interface ProfileProps {
-  user: UserProps;
-  onDisconnect: () => void;
-}
+export const Profile = () => {
+  const { user, disconnect } = useUser();
 
-export const Profile = ({ user, onDisconnect }: ProfileProps) => {
+  const { handler } = useHandler();
+
+  const onDisconnect = handler(async () => {
+    await disconnect(user);
+  });
+
   return (
     <Page title="Profile">
       <div className="d-flex flex-column align-items-center text-center">
@@ -24,7 +28,7 @@ export const Profile = ({ user, onDisconnect }: ProfileProps) => {
           <p className="font-size-sm">{user.publicKey}</p>
           <p className="text-muted mb-1">Balance</p>
           <p className="font-size-sm">{user.balance}</p>
-          <Button variant="primary" onClick={() => onDisconnect()}>
+          <Button variant="primary" onClick={onDisconnect}>
             Disconnect
           </Button>
         </div>
