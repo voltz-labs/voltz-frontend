@@ -1,9 +1,9 @@
 import { Button, Table } from "react-bootstrap";
-import { Fallback } from "../../components/Fallback";
-import { Page } from "../../components/Page";
-import { PageTitle } from "../../components/PageTitle";
-import { PageTitleText } from "../../components/PageTitleText";
-import { useRouter } from "../../hooks/useRouter";
+import { Fallback } from "../../../components/Fallback";
+import { Page } from "../../../components/Page";
+import { PageTitle } from "../../../components/PageTitle";
+import { PageTitleText } from "../../../components/PageTitleText";
+import { useRouter } from "../../../hooks/useRouter";
 import { useQueryPolls } from "./hooks/useQueryPolls";
 
 export const Polls = () => {

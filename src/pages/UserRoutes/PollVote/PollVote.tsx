@@ -1,19 +1,19 @@
 import { Button, Form } from "react-bootstrap";
-import { Fallback } from "../../components/Fallback";
-import { nanoid } from "../../functions/nanoid";
-import { useRouter } from "../../hooks/useRouter";
+import { Fallback } from "../../../components/Fallback";
+import { nanoid } from "../../../functions/nanoid";
+import { useRouter } from "../../../hooks/useRouter";
 import { useState } from "react";
-import { useSubmit } from "../../hooks/useSubmit";
-import { GraphQLError } from "../../utils/GraphQLError";
-import { useSuccess } from "../../hooks/useSuccess";
-import { downloadAsJson } from "../../functions/downloadAsJson";
-import { Page } from "../../components/Page";
+import { useSubmit } from "../../../hooks/useSubmit";
+import { GraphQLError } from "../../../utils/GraphQLError";
+import { useSuccess } from "../../../hooks/useSuccess";
+import { downloadAsJson } from "../../../functions/downloadAsJson";
+import { Page } from "../../../components/Page";
 import { useQueryPollVote } from "./hooks/useQueryPollVote";
-import { PageTitle } from "../../components/PageTitle";
-import { PageTitleText } from "../../components/PageTitleText";
-import { signContent } from "../../functions/signContent";
+import { PageTitle } from "../../../components/PageTitle";
+import { PageTitleText } from "../../../components/PageTitleText";
+import { signContent } from "../../../functions/signContent";
 import { createVote } from "./functions/createVote";
-import { useUser } from "../../hooks/useUser";
+import { useUser } from "../../../hooks/useUser";
 
 export const PollVote = () => {
   const { params } = useRouter();

@@ -1,5 +1,5 @@
-import { gql } from "../../../functions/gql";
-import { useQuery } from "../../../hooks/useQuery";
+import { gql } from "../../../../functions/gql";
+import { useQuery } from "../../../../hooks/useQuery";
 
 export interface GraphQLQueryVotes {
   votes: {

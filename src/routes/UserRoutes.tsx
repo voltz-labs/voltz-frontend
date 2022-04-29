@@ -2,12 +2,12 @@ import { Route, Routes } from "react-router";
 import { UserContextProvider } from "../contexts/UserContext";
 import { useHandler } from "../hooks/useHandler";
 import { UserProps } from "../models/User";
-import { CreatePoll } from "../pages/CreatePoll";
-import { Polls } from "../pages/Polls";
-import { PollVote } from "../pages/PollVote";
-import { Profile } from "../pages/Profile";
+import { CreatePoll } from "../pages/UserRoutes/CreatePoll";
+import { Polls } from "../pages/UserRoutes/Polls";
+import { PollVote } from "../pages/UserRoutes/PollVote";
+import { Profile } from "../pages/UserRoutes/Profile";
 import { Vote } from "../pages/Vote";
-import { Votes } from "../pages/Votes";
+import { Votes } from "../pages/UserRoutes/Votes";
 import { wallet } from "../utils/wallet";
 
 const routes = [

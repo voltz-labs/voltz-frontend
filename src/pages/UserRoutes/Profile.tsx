@@ -1,7 +1,7 @@
 import { Button } from "react-bootstrap";
-import { Page } from "../components/Page";
-import { useHandler } from "../hooks/useHandler";
-import { useUser } from "../hooks/useUser";
+import { Page } from "../../components/Page";
+import { useHandler } from "../../hooks/useHandler";
+import { useUser } from "../../hooks/useUser";
 
 export const Profile = () => {
   const { user, disconnect } = useUser();

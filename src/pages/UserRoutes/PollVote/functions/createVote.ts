@@ -1,5 +1,5 @@
-import { gql } from "../../../functions/gql";
-import { graphql } from "../../../functions/graphql";
+import { gql } from "../../../../functions/gql";
+import { graphql } from "../../../../functions/graphql";
 
 export interface MutationVoteCreate {
   voteCreate: {
