@@ -13,6 +13,7 @@ import { useHandler } from "../hooks/useHandler";
 import { GraphQLError } from "../utils/GraphQLError";
 import { wallet } from "../utils/wallet";
 import { getTezosBalance } from "../functions/getTezosBalance";
+import { NavLink } from "react-router-dom";
 
 export interface MutationUserConnect {}
 
@@ -86,6 +87,12 @@ export const Navbar = () => {
         <BSNavbar.Toggle aria-controls="basic-navbar-nav" />
         <BSNavbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
+            <Nav.Link as={NavLink} to="/polls">
+              Polls
+            </Nav.Link>
+            <Nav.Link as={NavLink} to="/votes">
+              Votes
+            </Nav.Link>
             <Nav.Link as={Link} to="/polls/new">
               New Poll
             </Nav.Link>
