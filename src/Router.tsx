@@ -31,7 +31,7 @@ export const Router = () => {
               <Route path="/profile" element={<Profile />} />
               <Route path="/polls" element={<Polls />} />
               <Route path="/polls/new" element={<CreatePoll />} />
-              <Route path="/polls/:pollId/vote" element={<PollVote />} />
+              <Route path="/polls/:pollId" element={<PollVote />} />
               <Route path="/votes" element={<Votes />} />
               <Route path="/votes/:voteId" element={<Vote />} />
             </>

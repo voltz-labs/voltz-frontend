@@ -84,15 +84,12 @@ export const Polls = () => {
                 <Button
                   size="sm"
                   onClick={() => {
-                    if (!poll.expired) {
-                      router.push({
-                        path: `/polls/${poll.pollId}/vote`,
-                      });
-                    }
+                    router.push({
+                      path: `/polls/${poll.pollId}`,
+                    });
                   }}
-                  disabled={poll.expired}
                 >
-                  Vote
+                  View
                 </Button>
               </td>
             </tr>

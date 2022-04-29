@@ -21,7 +21,7 @@ const routes = [
     component: CreatePoll,
   },
   {
-    path: "/polls/:pollId/vote",
+    path: "/polls/:pollId",
     component: PollVote,
   },
   {
