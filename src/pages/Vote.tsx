@@ -113,7 +113,7 @@ export const Vote = () => {
 
   return (
     <Page title="Vote">
-      <Form onSubmit={verifyPayload()}>
+      <Form onSubmit={verifyPayload}>
         <Form.Group className="mb-3">
           <Form.Label htmlFor="poll">Poll Title</Form.Label>
           <Form.Control

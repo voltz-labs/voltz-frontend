@@ -7,7 +7,7 @@ import { Profile } from "./pages/Profile";
 import { wallet } from "./utils/wallet";
 import { Loading } from "./pages/Loading";
 import { CreatePoll } from "./pages/CreatePoll";
-import { Poll } from "./pages/Poll";
+import { PollVote } from "./pages/PollVote";
 import { Vote } from "./pages/Vote";
 import { Polls } from "./pages/Polls";
 import { Votes } from "./pages/Votes";
@@ -40,7 +40,10 @@ export const Router = () => {
                 />
                 <Route path="/polls" element={<Polls />} />
                 <Route path="/polls/new" element={<CreatePoll user={user} />} />
-                <Route path="/polls/:pollId" element={<Poll user={user} />} />
+                <Route
+                  path="/polls/:pollId/vote"
+                  element={<PollVote user={user} />}
+                />
                 <Route path="/votes" element={<Votes />} />
                 <Route path="/votes/:voteId" element={<Vote />} />
               </>

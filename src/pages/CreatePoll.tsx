@@ -164,7 +164,7 @@ export const CreatePoll = ({ user }: CreatePollProps) => {
   return (
     <Page title="Create Poll">
       <h2 className="border-bottom">Create New Poll</h2>
-      <Form className="mb-3" onSubmit={onSubmit()}>
+      <Form className="mb-3" onSubmit={onSubmit}>
         <Form.Group className="mb-3">
           <Form.Label htmlFor="title">Poll Title</Form.Label>
           <Form.Control

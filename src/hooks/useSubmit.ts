@@ -8,7 +8,6 @@ export const useSubmit = () => {
 
   const submit =
     <T>(callback: (e: React.FormEvent) => Promise<T>) =>
-    () =>
     async (e: React.FormEvent) => {
       e.preventDefault();
 
