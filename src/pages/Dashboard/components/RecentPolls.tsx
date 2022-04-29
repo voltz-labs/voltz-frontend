@@ -35,7 +35,7 @@ export const RecentPolls = ({ polls }: RecentPollsProps) => {
           {polls.map((poll) => (
             <tr key={poll.pollId}>
               <td>
-                <Link to={`/polls/${poll.pollId}`}>{poll.title}</Link>
+                <Link to={`/polls/${poll.pollId}/vote`}>{poll.title}</Link>
               </td>
               <td>{poll.description}</td>
               <td>

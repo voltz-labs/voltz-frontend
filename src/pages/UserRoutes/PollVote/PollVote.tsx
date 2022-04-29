@@ -34,6 +34,9 @@ export const PollVote = () => {
     id: {
       pollId,
     },
+    input: {
+      voterAddress: user.address,
+    },
   });
 
   if (Q.fallback) {
@@ -96,35 +99,67 @@ export const PollVote = () => {
       <PageTitle>
         <PageTitleText>{poll.title}</PageTitleText>
       </PageTitle>
-      <Form onSubmit={selectedOption ? vote(selectedOption) : undefined}>
-        <section>
-          <strong>Description:</strong>
-          <p>{poll.description}</p>
-        </section>
-        <section>
-          <strong>Options:</strong>
-          <ul>
-            {poll.options.map((option) => (
+      {poll.votedOption || poll.expired ? (
+        <ul>
+          {poll.options.map((option) => {
+            const optionResult = poll.results.voteResults.find(
+              (result) => result.optionId === option.optionId
+            );
+
+            let percentage: number;
+            let voteNumber: number;
+            if (poll.results.voteCount > 0) {
+              voteNumber = optionResult?.voteCount || 0;
+              percentage = voteNumber / poll.results.voteCount;
+            } else {
+              voteNumber = 0;
+              percentage = 0;
+            }
+
+            return (
               <li key={option.optionId}>
-                <Form.Check
-                  type="radio"
-                  id={`option-${option.optionId}`}
-                  name="optionId"
-                  value={option.optionId}
-                  label={option.description}
-                  checked={selectedOption === option.optionId}
-                  onChange={(e) =>
-                    e.target.checked && setSelectedOption(option.optionId)
-                  }
-                />
+                {option.description}
+                {poll.votedOption?.optionId === option.optionId ? "✓" : ""}
+                {optionResult
+                  ? ` ${percentage * 100}% (${voteNumber} vote${
+                      voteNumber === 1 ? "" : "s"
+                    })`
+                  : ""}
               </li>
-            ))}
-          </ul>
-        </section>
-        <Button variant="primary" type="submit" disabled={submitLoading}>
-          Vote
-        </Button>
-      </Form>
+            );
+          })}
+        </ul>
+      ) : (
+        <Form onSubmit={selectedOption ? vote(selectedOption) : undefined}>
+          <section>
+            <strong>Description:</strong>
+            <p>{poll.description}</p>
+          </section>
+          <section>
+            <strong>Options:</strong>
+            <ul>
+              {poll.options.map((option) => (
+                <li key={option.optionId}>
+                  <Form.Check
+                    type="radio"
+                    id={`option-${option.optionId}`}
+                    name="optionId"
+                    value={option.optionId}
+                    label={option.description}
+                    checked={selectedOption === option.optionId}
+                    onChange={(e) =>
+                      e.target.checked && setSelectedOption(option.optionId)
+                    }
+                  />
+                </li>
+              ))}
+            </ul>
+          </section>
+          <Button variant="primary" type="submit" disabled={submitLoading}>
+            Vote
+          </Button>
+        </Form>
+      )}
     </Page>
   );
 };

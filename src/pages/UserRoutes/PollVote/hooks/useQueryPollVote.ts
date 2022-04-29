@@ -9,6 +9,7 @@ export interface PollVoteQuery {
     creatorAddress: string;
     payload: string;
     signature: string;
+    expired: string;
     creator: {
       address: string;
       publicKey: string;
@@ -17,6 +18,16 @@ export interface PollVoteQuery {
       optionId: string;
       description: string;
     }[];
+    votedOption: {
+      optionId: string;
+    } | null;
+    results: {
+      voteCount: number;
+      voteResults: {
+        optionId: string;
+        voteCount: number;
+      }[];
+    };
   };
 }
 
@@ -24,10 +35,13 @@ export interface PollVoteQueryVariables {
   id: {
     pollId: string;
   };
+  input: {
+    voterAddress: string;
+  };
 }
 
 export const POLL_QUERY = gql`
-  query ($id: PollID!) {
+  query ($id: PollID!, $input: VotedOptionInput!) {
     poll(id: $id) {
       pollId
       title
@@ -35,6 +49,7 @@ export const POLL_QUERY = gql`
       creatorAddress
       payload
       signature
+      expired
       creator {
         address
         publicKey
@@ -42,6 +57,16 @@ export const POLL_QUERY = gql`
       options {
         optionId
         description
+      }
+      votedOption(input: $input) {
+        optionId
+      }
+      results {
+        voteCount
+        voteResults {
+          optionId
+          voteCount
+        }
       }
     }
   }
