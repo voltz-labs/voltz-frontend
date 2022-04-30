@@ -49,6 +49,8 @@ export const Polls = () => {
             <th className="text-end">Minimal Balance</th>
             <th className="text-end">Expiration Date</th>
             <th className="text-end">Expiration Block Quote</th>
+            <th>Vote Count</th>
+            <th>Vote Balance</th>
             <th>Options</th>
           </tr>
         </thead>
@@ -81,6 +83,15 @@ export const Polls = () => {
                 {poll.expirationBlockQuote
                   ? new Intl.NumberFormat().format(poll.expirationBlockQuote)
                   : "N/A"}
+              </td>
+              <td className="text-end">{poll.results.voteCount}</td>
+              <td className="text-end">
+                {new Intl.NumberFormat(
+                  Intl.NumberFormat().resolvedOptions().locale,
+                  {
+                    minimumFractionDigits: 6,
+                  }
+                ).format(poll.results.voteBalance)}
               </td>
               <td>
                 <Button

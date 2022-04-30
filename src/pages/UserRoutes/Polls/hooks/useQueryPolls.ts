@@ -20,6 +20,10 @@ export interface GraphQLQueryPolls {
       expirationDate: Date;
       expirationBlockQuote: number;
       pollType: PollType;
+      results: {
+        voteCount: number;
+        voteBalance: number;
+      };
     }[];
   };
 }
@@ -43,6 +47,10 @@ export const GRAPHQL_QUERY_POLLS = gql`
         expirationDate
         expirationBlockQuote
         pollType
+        results {
+          voteCount
+          voteBalance
+        }
       }
     }
   }
