@@ -1,0 +1,37 @@
+#!/usr/bin/env bash
+
+set -e
+
+script_name="$(basename "$0")"
+script_dir="$(realpath "$(dirname "$0")")"
+
+root_dir="$(realpath "$script_dir/..")"
+
+env_production="$root_dir/.env"
+
+usage() {
+  echo "$script_name: usage: $script_name" >&2
+}
+
+exit_with_error() {
+  echo "$script_name: error: $1" >&2
+  usage
+  exit 1
+}
+
+push_images() {
+  (
+    cd "$1" || exit_with_error "failed to access directory \"$1\""
+    docker push "$2:latest"
+    docker push "$2:$3"
+  )
+}
+
+if ! [ -r "$env_production" ]; then
+  exit_with_error "failed to read .env file"
+fi
+
+docker_image="$(grep -E "^DOCKER_IMAGE=" .env | sed -E 's/^DOCKER_IMAGE=([^\s]*)/\1/')"
+docker_version="$("$script_dir/get-version" "$root_dir")"
+
+push_images "$root_dir" "$docker_image" "$docker_version"

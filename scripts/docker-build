@@ -1,0 +1,51 @@
+#!/usr/bin/env bash
+
+set -e
+
+script_name="$(basename "$0")"
+script_dir="$(realpath "$(dirname "$0")")"
+
+root_dir="$(realpath "$script_dir/..")"
+
+env_production="$root_dir/.env"
+
+usage() {
+  echo "$script_name: usage: $script_name" >&2
+}
+
+exit_with_error() {
+  echo "$script_name: error: $1" >&2
+  usage
+  exit 1
+}
+
+get_build_args() {
+  _rows=$(grep -E "^REACT_APP" "$1")
+
+  _args=""
+
+  IFS=$'\n' && for row in $(echo -E "$_rows"); do
+    _key="${row%=*}"
+    _value="${row#*=}"
+    _args="${_args} --build-arg $_key=$_value"
+  done
+
+  echo $_args | sed -E 's/^\s(.*)$/\1/'
+}
+
+build_images() {
+  (
+    cd "$1" || exit_with_error "failed to access directory \"$1\""
+    eval docker build $(get_build_args "$env_production") --build-arg "REACT_APP_VERSION=$3" -t "$2:latest" .
+    docker tag "$2:latest" "$2:$3"
+  )
+}
+
+if ! [ -r "$env_production" ]; then
+  exit_with_error "failed to read .env file"
+fi
+
+docker_image="$(grep -E "^DOCKER_IMAGE=" .env | sed -E 's/^DOCKER_IMAGE=([^\s]*)/\1/')"
+docker_version="$("$script_dir/get-version" "$root_dir")"
+
+build_images "$root_dir" "$docker_image" "$docker_version"

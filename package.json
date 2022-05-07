@@ -81,7 +81,8 @@
   },
   "scripts": {
     "build": "node scripts/build.js",
-    "dev": "NODE_ENV=development BROWSER=none runtime-env-cra --env-file=\"./.env\" --config-name=\"./public/runtime-env.js\" && node scripts/start.js"
+    "dev": "NODE_ENV=development BROWSER=none runtime-env-cra --env-file=\"./.env\" --config-name=\"./public/runtime-env.js\" && node scripts/start.js",
+    "docker": "./scripts/docker"
   },
   "eslintConfig": {
     "extends": [
