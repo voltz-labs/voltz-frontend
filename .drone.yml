@@ -1,0 +1,119 @@
+kind: pipeline
+type: docker
+name: build
+steps:
+  - name: build
+    image: docker
+    commands:
+      - echo "Building image version ${DRONE_TAG:1}"
+      - |
+        echo "$${registry_password}" |
+          docker login "$${registry_server}" \
+            --username="$${registry_username}" \
+            --password-stdin
+      - |
+        docker build \
+          --build-arg REACT_APP_VERSION="${DRONE_TAG:1}" \
+          --tag "$${docker_image}:${DRONE_TAG:1}" .
+      - |
+        docker tag \
+          "$${docker_image}:${DRONE_TAG:1}" "$${docker_image}:latest"
+      - docker push "$${docker_image}:${DRONE_TAG:1}"
+      - docker push "$${docker_image}:latest"
+    environment:
+      registry_server:
+        from_secret: registry_server
+      registry_username:
+        from_secret: registry_username
+      registry_password:
+        from_secret: registry_password
+      docker_image:
+        from_secret: docker_image
+    volumes:
+      - name: docker-sock
+        path: /var/run/docker.sock
+trigger:
+  event:
+    - tag
+volumes:
+  - name: docker-sock
+    host:
+      path: /var/run/docker.sock
+---
+kind: pipeline
+type: ssh
+name: deploy-development
+clone:
+  disable: true
+server:
+  host:
+    from_secret: development_host
+  user:
+    from_secret: development_user
+  ssh_key:
+    from_secret: ssh_key
+steps:
+  - name: deploy
+    commands:
+      - echo "Deploying development image version ${DRONE_TAG:1}"
+      - |
+        echo "$${registry_password}" |
+          docker login "$${registry_server}" \
+            --username="$${registry_username}" \
+            --password-stdin
+      - cd "$${development_app_directory}"
+      - docker-compose pull
+      - docker-compose up --detach --wait
+    environment:
+      development_app_directory:
+        from_secret: development_app_directory
+      registry_server:
+        from_secret: registry_server
+      registry_username:
+        from_secret: registry_username
+      registry_password:
+        from_secret: registry_password
+depends_on:
+  - build
+trigger:
+  event:
+    - tag
+---
+kind: pipeline
+type: ssh
+name: deploy-production
+clone:
+  disable: true
+server:
+  host:
+    from_secret: production_host
+  user:
+    from_secret: production_user
+  ssh_key:
+    from_secret: ssh_key
+steps:
+  - name: deploy
+    commands:
+      - echo "Deploying production image version ${DRONE_TAG:1}"
+      - |
+        echo "$${registry_password}" |
+          docker login "$${registry_server}" \
+            --username="$${registry_username}" \
+            --password-stdin
+      - cd "$${production_app_directory}"
+      - docker-compose pull
+      - docker-compose up --detach --wait
+    environment:
+      production_app_directory:
+        from_secret: production_app_directory
+      registry_server:
+        from_secret: registry_server
+      registry_username:
+        from_secret: registry_username
+      registry_password:
+        from_secret: registry_password
+trigger:
+  target:
+    - production
+  event:
+    - promote
