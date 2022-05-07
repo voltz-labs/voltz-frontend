@@ -62,6 +62,7 @@
     "react-router-dom": "^6.3.0",
     "resolve": "^1.20.0",
     "resolve-url-loader": "^4.0.0",
+    "runtime-env-cra": "^0.2.4",
     "sass": "^1.50.1",
     "sass-loader": "^12.3.0",
     "semver": "^7.3.5",
@@ -80,7 +81,7 @@
   },
   "scripts": {
     "build": "node scripts/build.js",
-    "dev": "BROWSER=none node scripts/start.js",
+    "dev": "NODE_ENV=development BROWSER=none runtime-env-cra --env-file=\"./.env\" --config-name=\"./public/runtime-env.js\" && node scripts/start.js",
     "docker": "./scripts/docker"
   },
   "eslintConfig": {

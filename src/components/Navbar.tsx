@@ -71,17 +71,16 @@ export const Navbar = () => {
   });
 
   return (
-    <BSNavbar bg="light" variant="light" className="text-light">
+    <BSNavbar bg="light" variant="light" className="text-light fs-4 fw-bold">
       <Container>
         <BSNavbar.Brand as={Link} to="/">
           <img
             alt="Logo"
-            src="https://react-bootstrap.netlify.app/logo.svg"
-            width="30"
-            height="30"
+            src="/logo-wide.svg"
+            width="180"
+            height="40"
             className="d-inline-block align-top"
-          />{" "}
-          Voltz
+          />
         </BSNavbar.Brand>
 
         <BSNavbar.Toggle aria-controls="basic-navbar-nav" />

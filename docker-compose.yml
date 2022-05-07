@@ -1,9 +1,17 @@
 version: '3'
 
 services:
-  nginx:
+  app:
     build: .
     image: $DOCKER_IMAGE
+    env_file:
+      - .env
+    environment:
+      - NODE_ENV=production
+    logging:
+      driver: json-file
+      options:
+        max-size: 10m
     ports:
       - $PORT:80
     restart: always
