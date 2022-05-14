@@ -1,18 +1,46 @@
 import React, { useEffect, useState } from "react";
 import { getTezosBalance } from "../functions/getTezosBalance";
+import { gql } from "../functions/gql";
+import { graphql } from "../functions/graphql";
+import { useHandler } from "../hooks/useHandler";
 import { UserProps } from "../models/User";
 import { LOCAL_STORAGE_USER_KEY } from "../utils/constants";
+import { GraphQLError } from "../utils/GraphQLError";
+import { wallet } from "../utils/wallet";
+
+export interface MutationUserConnect {
+  address: string;
+  publicKey: string;
+}
+
+export interface MutationUserConnectVariables {
+  input: {
+    address: string;
+    publicKey: string;
+  };
+}
+
+export const MUTATION_USER_CONNECT = gql`
+  mutation ($input: UserConnectInput!) {
+    userConnect(input: $input) {
+      address
+      publicKey
+    }
+  }
+`;
 
 export interface AuthContextProps {
   loading: boolean;
   user: UserProps | null;
   setUser: (user: UserProps | null) => void;
+  connect: () => Promise<void>;
 }
 
 export const AuthContext = React.createContext<AuthContextProps>({
   loading: true,
   user: null,
   setUser: () => {},
+  connect: async () => {},
 });
 
 export const AuthContextProvider = ({
@@ -66,12 +94,45 @@ export const AuthContextProvider = ({
     }
   };
 
+  const { handler } = useHandler();
+
+  const connect = handler(async () => {
+    const permissions = await wallet.client.requestPermissions();
+
+    if (permissions) {
+      const { errors } = await graphql<
+        MutationUserConnect,
+        MutationUserConnectVariables
+      >({
+        query: MUTATION_USER_CONNECT,
+        variables: {
+          input: {
+            address: permissions.address,
+            publicKey: permissions.publicKey,
+          },
+        },
+      });
+
+      if (errors) {
+        throw new GraphQLError("Failed to connect wallet", errors);
+      }
+
+      const balance = await getTezosBalance(permissions.address);
+
+      setUser({
+        address: permissions.address,
+        publicKey: permissions.publicKey,
+        balance,
+      });
+    }
+  });
+
   useEffect(() => {
     fetchStorage();
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user, setUser, loading }}>
+    <AuthContext.Provider value={{ user, setUser, loading, connect }}>
       {children}
     </AuthContext.Provider>
   );

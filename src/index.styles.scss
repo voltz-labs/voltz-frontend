@@ -1,3 +1,20 @@
 $primary: #add4d3;
 
 @import "~bootstrap/scss/bootstrap";
+
+html,
+body {
+  height: 100%;
+}
+
+#root {
+  display: grid;
+  min-height: 100%;
+}
+
+.page {
+  display: grid;
+  grid-template-areas: "header" "main" "footer";
+  grid-template-rows: auto 1fr auto;
+  height: 100%;
+}

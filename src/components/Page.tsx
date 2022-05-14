@@ -9,23 +9,21 @@ export interface PageProps {
 
 export const Page = ({ title, children }: PropsWithChildren<PageProps>) => {
   return (
-    <>
+    <div className="page">
       <Helmet>
         <title>{`Voltz • ${title}`}</title>
       </Helmet>
-      <header className="mb-5">
+      <header>
         <Navbar />
       </header>
-      <main>
-        <Container>{children}</Container>
+      <main className="bg-light">
+        <Container className="h-100">{children}</Container>
       </main>
-      <footer className="mb-3">
+      <footer className="py-3 bg-dark text-light">
         <Container>
-          <div className="text-center text-muted">
-            Voltz &mdash; &copy; 2022
-          </div>
+          <div className="text-center">Voltz &mdash; &copy; 2022</div>
         </Container>
       </footer>
-    </>
+    </div>
   );
 };

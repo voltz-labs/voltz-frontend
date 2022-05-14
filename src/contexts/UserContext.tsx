@@ -1,5 +1,9 @@
 import React from "react";
+import { useAuth } from "../hooks/useAuth";
+import { useHandler } from "../hooks/useHandler";
 import { UserProps } from "../models/User";
+import { Loading } from "../pages/Loading";
+import { wallet } from "../utils/wallet";
 
 export interface UserContextProps {
   user: UserProps;
@@ -17,14 +21,29 @@ export const UserContext = React.createContext<UserContextProps>({
 
 export interface UserContextProviderProps {
   user: UserProps;
-  disconnect: (user: UserProps) => Promise<void>;
 }
 
 export const UserContextProvider = ({
-  user,
-  disconnect,
   children,
 }: React.PropsWithChildren<UserContextProviderProps>) => {
+  const { handler } = useHandler();
+
+  const { user, setUser } = useAuth();
+
+  const disconnect = handler(async () => {
+    setUser(null);
+
+    try {
+      await wallet.clearActiveAccount();
+    } catch (err) {
+      console.error(err);
+    }
+  });
+
+  if (!user) {
+    return <Loading />;
+  }
+
   return (
     <UserContext.Provider value={{ user, disconnect }}>
       {children}
