@@ -33,9 +33,11 @@ export const NavBar = () => {
           <Nav className="w-100">
             {loading ? null : user ? (
               <>
-                <Nav.Link as={NavLink} to="/whitelists">
-                  Whitelists
-                </Nav.Link>
+                {user.isAdmin && (
+                  <Nav.Link as={NavLink} to="/whitelists">
+                    Whitelists
+                  </Nav.Link>
+                )}
                 <Nav.Link
                   className="d-block d-lg-none"
                   as={NavLink}

@@ -23,6 +23,7 @@ export type SuccessResult<T> = {
   data: T;
   errors: null;
   fallback: false;
+  refetch: () => void;
 };
 
 export type LoadingResult = {
@@ -120,5 +121,8 @@ export const useQuery = <
     data: fields.data,
     errors: fields.errors,
     fallback: false,
+    refetch: () => {
+      fetchQuery();
+    },
   };
 };
