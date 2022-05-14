@@ -9,8 +9,12 @@ import { GraphQLError } from "../utils/GraphQLError";
 import { wallet } from "../utils/wallet";
 
 export interface MutationUserConnect {
-  address: string;
-  publicKey: string;
+  userConnect: {
+    address: string;
+    publicKey: string;
+    isAdmin: boolean;
+    isWhitelisted: boolean;
+  };
 }
 
 export interface MutationUserConnectVariables {
@@ -25,6 +29,8 @@ export const MUTATION_USER_CONNECT = gql`
     userConnect(input: $input) {
       address
       publicKey
+      isAdmin
+      isWhitelisted
     }
   }
 `;
@@ -100,7 +106,7 @@ export const AuthContextProvider = ({
     const permissions = await wallet.client.requestPermissions();
 
     if (permissions) {
-      const { errors } = await graphql<
+      const { data, errors } = await graphql<
         MutationUserConnect,
         MutationUserConnectVariables
       >({
@@ -123,6 +129,8 @@ export const AuthContextProvider = ({
         address: permissions.address,
         publicKey: permissions.publicKey,
         balance,
+        isAdmin: data.userConnect.isAdmin,
+        isWhitelisted: data.userConnect.isWhitelisted,
       });
     }
   });

@@ -62,13 +62,13 @@ export const NavBar = () => {
                     Profile
                   </NavDropdown.Item>
                   <NavDropdown.Divider />
-                  <NavDropdown.Item onClick={connect}>
+                  <NavDropdown.Item onClick={disconnect}>
                     Disconnect
                   </NavDropdown.Item>
                 </NavDropdown>
               </>
             ) : (
-              <Nav.Item>
+              <Nav.Item className="ms-auto">
                 <Button variant="primary" onClick={connect}>
                   Connect
                 </Button>

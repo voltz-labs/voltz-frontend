@@ -9,6 +9,8 @@ import { UserContextProvider } from "./contexts/UserContext";
 export const Router = () => {
   const { loading, user } = useAuth();
 
+  console.log(user);
+
   return (
     <BrowserRouter>
       {loading ? (

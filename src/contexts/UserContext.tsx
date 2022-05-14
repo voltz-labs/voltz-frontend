@@ -15,6 +15,8 @@ export const UserContext = React.createContext<UserContextProps>({
     address: "",
     publicKey: "",
     balance: 0,
+    isAdmin: false,
+    isWhitelisted: false,
   },
   disconnect: async () => {},
 });
