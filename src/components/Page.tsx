@@ -1,7 +1,7 @@
 import { PropsWithChildren } from "react";
 import { Container } from "react-bootstrap";
 import { Helmet } from "react-helmet-async";
-import { Navbar } from "./Navbar";
+import { NavBar } from "./Navbar";
 
 export interface PageProps {
   title: string;
@@ -14,7 +14,7 @@ export const Page = ({ title, children }: PropsWithChildren<PageProps>) => {
         <title>{`Voltz • ${title}`}</title>
       </Helmet>
       <header>
-        <Navbar />
+        <NavBar />
       </header>
       <main className="bg-light">
         <Container className="h-100">{children}</Container>

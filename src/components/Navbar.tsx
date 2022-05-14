@@ -1,78 +1,23 @@
-import {
-  Navbar as BSNavbar,
-  Container,
-  Nav,
-  NavDropdown,
-  Button,
-} from "react-bootstrap";
+import { Navbar, Container, Nav, NavDropdown, Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import { gql } from "../functions/gql";
-import { graphql } from "../functions/graphql";
 import { useAuth } from "../hooks/useAuth";
-import { useHandler } from "../hooks/useHandler";
-import { GraphQLError } from "../utils/GraphQLError";
-import { wallet } from "../utils/wallet";
-import { getTezosBalance } from "../functions/getTezosBalance";
+import { NavLink } from "react-router-dom";
+import { useUser } from "../hooks/useUser";
 
-export interface MutationUserConnect {}
+export const NavBar = () => {
+  const { loading, user, connect } = useAuth();
 
-export interface MutationUserConnectVariables {}
-
-export const MUTATION_USER_CONNECT = gql`
-  mutation ($input: UserConnectInput!) {
-    userConnect(input: $input) {
-      address
-      publicKey
-    }
-  }
-`;
-
-export const Navbar = () => {
-  const { user, setUser } = useAuth();
-
-  const { handler } = useHandler();
-
-  const connectWallet = handler(async () => {
-    const permissions = await wallet.client.requestPermissions();
-
-    if (permissions) {
-      const { errors } = await graphql<
-        MutationUserConnect,
-        MutationUserConnectVariables
-      >({
-        query: MUTATION_USER_CONNECT,
-        variables: {
-          input: {
-            address: permissions.address,
-            publicKey: permissions.publicKey,
-          },
-        },
-      });
-
-      if (errors) {
-        throw new GraphQLError("Failed to connect wallet", errors);
-      }
-
-      const balance = await getTezosBalance(permissions.address);
-
-      setUser({
-        address: permissions.address,
-        publicKey: permissions.publicKey,
-        balance,
-      });
-    }
-  });
-
-  const disconnectWallet = handler(async () => {
-    setUser(null);
-
-    await wallet.clearActiveAccount();
-  });
+  const { disconnect } = useUser();
 
   return (
-    <BSNavbar bg="dark" variant="dark" className="text-light fs-4 fw-bold">
+    <Navbar
+      bg="dark"
+      variant="dark"
+      className="text-light fs-4 fw-bold"
+      expand="lg"
+    >
       <Container>
-        <BSNavbar.Brand as={Link} to="/">
+        <Navbar.Brand as={Link} to="/">
           <img
             alt="Logo"
             src="/logo-wide.svg"
@@ -80,37 +25,58 @@ export const Navbar = () => {
             height="40"
             className="d-inline-block align-top"
           />
-        </BSNavbar.Brand>
-        <Nav>
-          {user ? (
-            <NavDropdown
-              title={
-                <img
-                  alt="Avatar"
-                  src={`https://services.tzkt.io/v1/avatars/${user.address}`}
-                  width="30"
-                  height="30"
-                  className="rounded-circle"
-                />
-              }
-            >
-              <NavDropdown.Item as={Link} to="/profile">
-                Profile
-              </NavDropdown.Item>
-              <NavDropdown.Divider />
-              <NavDropdown.Item onClick={disconnectWallet}>
-                Disconnect
-              </NavDropdown.Item>
-            </NavDropdown>
-          ) : (
-            <Nav.Item>
-              <Button variant="primary" onClick={connectWallet}>
-                Connect
-              </Button>
-            </Nav.Item>
-          )}
-        </Nav>
+        </Navbar.Brand>
+
+        <Navbar.Toggle aria-controls="navbar" />
+
+        <Navbar.Collapse id="navbar">
+          <Nav className="w-100">
+            {loading ? null : user ? (
+              <>
+                <Nav.Link as={NavLink} to="/whitelists">
+                  Whitelists
+                </Nav.Link>
+                <Nav.Link
+                  className="d-block d-lg-none"
+                  as={NavLink}
+                  to="/profile"
+                >
+                  Profile
+                </Nav.Link>
+                <Nav.Link className="d-block d-lg-none" onClick={disconnect}>
+                  Disconnect
+                </Nav.Link>
+                <NavDropdown
+                  className="ms-lg-auto d-none d-lg-block"
+                  title={
+                    <img
+                      alt="Avatar"
+                      src={`https://services.tzkt.io/v1/avatars/${user.address}`}
+                      width="30"
+                      height="30"
+                      className="rounded-circle"
+                    />
+                  }
+                >
+                  <NavDropdown.Item as={Link} to="/profile">
+                    Profile
+                  </NavDropdown.Item>
+                  <NavDropdown.Divider />
+                  <NavDropdown.Item onClick={connect}>
+                    Disconnect
+                  </NavDropdown.Item>
+                </NavDropdown>
+              </>
+            ) : (
+              <Nav.Item>
+                <Button variant="primary" onClick={connect}>
+                  Connect
+                </Button>
+              </Nav.Item>
+            )}
+          </Nav>
+        </Navbar.Collapse>
       </Container>
-    </BSNavbar>
+    </Navbar>
   );
 };

@@ -1,6 +1,6 @@
 import { Button, Form } from "react-bootstrap";
 import { Fallback } from "../components/Fallback";
-import { Navbar } from "../components/Navbar";
+import { NavBar } from "../components/Navbar";
 import { convertHexToString } from "../functions/convertHexToString";
 import { gql } from "../functions/gql";
 import { useQuery } from "../hooks/useQuery";
@@ -85,7 +85,7 @@ export const Vote = () => {
   if (Q.fallback) {
     return (
       <div>
-        <Navbar />
+        <NavBar />
 
         <Fallback loading={Q.loading} errors={Q.errors} />
       </div>

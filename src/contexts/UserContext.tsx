@@ -7,7 +7,7 @@ import { wallet } from "../utils/wallet";
 
 export interface UserContextProps {
   user: UserProps;
-  disconnect: (user: UserProps) => Promise<void>;
+  disconnect: () => Promise<void>;
 }
 
 export const UserContext = React.createContext<UserContextProps>({

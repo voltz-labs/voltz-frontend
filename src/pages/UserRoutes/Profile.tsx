@@ -9,7 +9,7 @@ export const Profile = () => {
   const { handler } = useHandler();
 
   const onDisconnect = handler(async () => {
-    await disconnect(user);
+    await disconnect();
   });
 
   return (
