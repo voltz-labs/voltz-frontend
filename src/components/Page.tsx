@@ -21,7 +21,20 @@ export const Page = ({ title, children }: PropsWithChildren<PageProps>) => {
       </main>
       <footer className="py-3 bg-dark text-light">
         <Container>
-          <div className="text-center">Voltz &mdash; &copy; 2022</div>
+          <div className="text-center">
+            <span>
+              This is currently the Voltz proof of concept, and the alpha
+              version at that. Source code available at{" "}
+              <a
+                href="https://github.com/voltz-labs/voltz-frontend"
+                target="_blank"
+                rel="noreferrer"
+              >
+                GitHub
+              </a>
+              .
+            </span>
+          </div>
         </Container>
       </footer>
     </div>
