@@ -7,6 +7,7 @@ import { PageTitleText } from "../../components/PageTitleText";
 import { gql } from "../../functions/gql";
 import { graphql } from "../../functions/graphql";
 import { useConfirm } from "../../hooks/useConfirm";
+import { useRouter } from "../../hooks/useRouter";
 import { GraphQLError } from "../../utils/GraphQLError";
 import { useQueryWhitelists } from "./hooks/useQueryWhitelists";
 
@@ -14,6 +15,8 @@ export const WhitelistList = () => {
   const { createConfirm } = useConfirm();
 
   const Q = useQueryWhitelists();
+
+  const router = useRouter();
 
   if (Q.fallback) {
     return (
@@ -59,6 +62,18 @@ export const WhitelistList = () => {
     <Page title="Whitelists">
       <PageTitle>
         <PageTitleText>Whitelists</PageTitleText>
+        <div className="ms-auto">
+          <Button
+            variant="primary"
+            onClick={() => {
+              router.push({
+                path: "/whitelists/new",
+              });
+            }}
+          >
+            New
+          </Button>
+        </div>
       </PageTitle>
       <PageContainer>
         <Table hover responsive>

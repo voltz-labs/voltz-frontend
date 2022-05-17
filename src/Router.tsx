@@ -8,6 +8,7 @@ import { UserContextProvider } from "./contexts/UserContext";
 import { NotFound } from "./pages/NotFound";
 import { WhitelistList } from "./pages/WhitelistList";
 import { Profile } from "./pages/Profile";
+import { WhitelistCreate } from "./pages/WhitelistCreate";
 
 export const Router = () => {
   const { loading, user } = useAuth();
@@ -27,6 +28,7 @@ export const Router = () => {
             {user.isAdmin && (
               <>
                 <Route path="/whitelists" element={<WhitelistList />} />
+                <Route path="/whitelists/new" element={<WhitelistCreate />} />
               </>
             )}
             <Route path="/profile" element={<Profile />} />
