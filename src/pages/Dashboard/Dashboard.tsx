@@ -1,28 +1,13 @@
-import { Fallback } from "../../components/Fallback";
-import { Page } from "../../components/Page";
-import { RecentPolls } from "./components/RecentPolls";
-import { RecentVotes } from "./components/RecentVotes";
-import { useQueryDashboard } from "./hooks/useQueryDashboard";
+import { useUser } from "../../hooks/useUser";
+import { DashboardNotWhitelisted } from "./DashboardNotWhitelisted";
+import { DashboardWhitelisted } from "./DashboardWhitelisted";
 
 export const Dashboard = () => {
-  const Q = useQueryDashboard();
+  const { user } = useUser();
 
-  if (Q.fallback) {
-    return (
-      <Page title="Dashboard">
-        <Fallback loading={Q.loading} errors={Q.errors} />
-      </Page>
-    );
-  }
-
-  const {
-    data: { polls, votes },
-  } = Q;
-
-  return (
-    <Page title="Dashboard">
-      <RecentPolls polls={polls.items} />
-      <RecentVotes votes={votes.items} />
-    </Page>
+  return user.isWhitelisted ? (
+    <DashboardWhitelisted />
+  ) : (
+    <DashboardNotWhitelisted />
   );
 };
