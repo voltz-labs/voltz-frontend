@@ -17,8 +17,10 @@ export const DashboardNotWhitelisted = () => {
           in our whitelisted users.
         </p>
         <p>
-          Thanks for your interest in our app, contact us via email to get
-          allowed into the beta proof-of-concept.
+          Thanks for your interest in our app, contact us via{" "}
+          <a href="mailto:voltz.live@protonmail.com">email</a>{" "}
+          (voltz.live@protonmail.com) to get allowed into the beta
+          proof-of-concept.
         </p>
       </div>
     </Page>

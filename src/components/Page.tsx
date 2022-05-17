@@ -2,7 +2,8 @@ import { PropsWithChildren } from "react";
 import { Col, Container, Row } from "react-bootstrap";
 import { Helmet } from "react-helmet-async";
 import { NavBar } from "./Navbar";
-import { BsGithub, BsTelegram, BsTwitter } from "react-icons/bs";
+import { BsDiscord, BsGithub, BsTelegram, BsTwitter } from "react-icons/bs";
+import { FiMail } from "react-icons/fi";
 
 export interface PageProps {
   title: string;
@@ -42,7 +43,20 @@ export const Page = ({ title, children }: PropsWithChildren<PageProps>) => {
           </Row>
           <Row>
             <Col>
-              <div className="py-2 d-flex flex-direction-column align-items-center justify-content-center gap-3">
+              <div className="py-2 fs-4 d-flex flex-direction-column align-items-center justify-content-center gap-4">
+                <a
+                  target="_blank"
+                  rel="noreferrer"
+                  href="https://discord.gg/nGDccDYSFF"
+                  title="Discord"
+                >
+                  <BsDiscord />
+                  <span className="visually-hidden">Discord</span>
+                </a>
+                <a href="mailto:voltz.live@protonmail.com" title="Email">
+                  <FiMail />
+                  <span className="visually-hidden">Email</span>
+                </a>
                 <a
                   target="_blank"
                   rel="noreferrer"
@@ -64,7 +78,7 @@ export const Page = ({ title, children }: PropsWithChildren<PageProps>) => {
                 <a
                   target="_blank"
                   rel="noreferrer"
-                  href="https://web.telegram.org/"
+                  href="https://twitter.com/VoltzLive"
                   title="Twitter"
                 >
                   <BsTwitter />
