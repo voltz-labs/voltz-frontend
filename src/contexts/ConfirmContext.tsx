@@ -51,7 +51,7 @@ export const ConfirmContextProvider = ({
       {confirms.map((confirm, index) => (
         <ModalConfirm
           key={confirm.id}
-          title="Confirmar"
+          title="Confirm"
           onConfirm={handler(async () => {
             try {
               await confirm.onConfirm();

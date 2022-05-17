@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { getTezosBalance } from "../functions/getTezosBalance";
 import { gql } from "../functions/gql";
 import { graphql } from "../functions/graphql";
+import { useConfirm } from "../hooks/useConfirm";
 import { useHandler } from "../hooks/useHandler";
 import { UserProps } from "../models/User";
 import { LOCAL_STORAGE_USER_KEY } from "../utils/constants";
@@ -55,6 +56,8 @@ export const AuthContextProvider = ({
   const [loading, setLoading] = useState(true);
   const [user, _setUser] = useState<UserProps | null>(null);
 
+  const { createConfirm } = useConfirm();
+
   const setUser = (user: UserProps | null) => {
     if (!user) {
       localStorage.removeItem(LOCAL_STORAGE_USER_KEY);
@@ -106,31 +109,40 @@ export const AuthContextProvider = ({
     const permissions = await wallet.client.requestPermissions();
 
     if (permissions) {
-      const { data, errors } = await graphql<
-        MutationUserConnect,
-        MutationUserConnectVariables
-      >({
-        query: MUTATION_USER_CONNECT,
-        variables: {
-          input: {
+      createConfirm({
+        message:
+          "This software is still in testing. I understand that I am using Voltz at my own risk. Any losses incurred due to my actions are my own responsibility",
+        onClose: async () => {
+          await wallet.client.clearActiveAccount();
+        },
+        onConfirm: async () => {
+          const { data, errors } = await graphql<
+            MutationUserConnect,
+            MutationUserConnectVariables
+          >({
+            query: MUTATION_USER_CONNECT,
+            variables: {
+              input: {
+                address: permissions.address,
+                publicKey: permissions.publicKey,
+              },
+            },
+          });
+
+          if (errors) {
+            throw new GraphQLError("Failed to connect wallet", errors);
+          }
+
+          const balance = await getTezosBalance(permissions.address);
+
+          setUser({
             address: permissions.address,
             publicKey: permissions.publicKey,
-          },
+            balance,
+            isAdmin: data.userConnect.isAdmin,
+            isWhitelisted: data.userConnect.isWhitelisted,
+          });
         },
-      });
-
-      if (errors) {
-        throw new GraphQLError("Failed to connect wallet", errors);
-      }
-
-      const balance = await getTezosBalance(permissions.address);
-
-      setUser({
-        address: permissions.address,
-        publicKey: permissions.publicKey,
-        balance,
-        isAdmin: data.userConnect.isAdmin,
-        isWhitelisted: data.userConnect.isWhitelisted,
       });
     }
   });

@@ -18,13 +18,18 @@ export const NavBar = () => {
     >
       <Container>
         <Navbar.Brand as={Link} to="/">
-          <img
-            alt="Logo"
-            src="/logo-wide.svg"
-            width="180"
-            height="40"
-            className="d-inline-block align-top"
-          />
+          <div className="position-relative">
+            <img
+              alt="Logo"
+              src="/logo-wide.svg"
+              width="180"
+              height="40"
+              className="d-inline-block align-top"
+            />
+            <span className="position-absolute top-0 start-75 translate-middle badge rounded-pill bg-primary">
+              Beta<span className="visually-hidden">Beta Testing</span>
+            </span>
+          </div>
         </Navbar.Brand>
 
         <Navbar.Toggle aria-controls="navbar" />
