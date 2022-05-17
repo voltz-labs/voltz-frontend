@@ -1,6 +1,6 @@
 {
   "name": "voltz-frontend",
-  "version": "0.7.3",
+  "version": "0.7.4",
   "private": true,
   "dependencies": {
     "@babel/core": "^7.16.0",
