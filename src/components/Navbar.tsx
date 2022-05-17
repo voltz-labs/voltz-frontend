@@ -33,10 +33,21 @@ export const NavBar = () => {
           <Nav className="w-100">
             {loading ? null : user ? (
               <>
-                {user.isAdmin && (
-                  <Nav.Link as={NavLink} to="/whitelists">
-                    Whitelists
-                  </Nav.Link>
+                {user.isWhitelisted && (
+                  <>
+                    {user.isAdmin && (
+                      <Nav.Link as={NavLink} to="/whitelists">
+                        Whitelists
+                      </Nav.Link>
+                    )}
+
+                    <Nav.Link as={NavLink} to="/polls">
+                      Polls
+                    </Nav.Link>
+                    <Nav.Link as={NavLink} to="/votes">
+                      Votes
+                    </Nav.Link>
+                  </>
                 )}
                 <Nav.Link
                   className="d-block d-lg-none"

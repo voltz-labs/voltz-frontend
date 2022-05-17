@@ -9,11 +9,14 @@ import { NotFound } from "./pages/NotFound";
 import { WhitelistList } from "./pages/WhitelistList";
 import { Profile } from "./pages/Profile";
 import { WhitelistCreate } from "./pages/WhitelistCreate";
+import { Polls } from "./pages/Polls";
+import { Votes } from "./pages/Votes";
+import { PollCreate } from "./pages/PollCreate";
+import { PollVote } from "./pages/PollVote";
+import { Vote } from "./pages/Vote";
 
 export const Router = () => {
   const { loading, user } = useAuth();
-
-  console.log(user);
 
   return (
     <BrowserRouter>
@@ -31,6 +34,11 @@ export const Router = () => {
                 <Route path="/whitelists/new" element={<WhitelistCreate />} />
               </>
             )}
+            <Route path="/polls" element={<Polls />} />
+            <Route path="/polls/new" element={<PollCreate />} />
+            <Route path="/polls/:pollId" element={<PollVote />} />
+            <Route path="/votes" element={<Votes />} />
+            <Route path="/votes/:voteId" element={<Vote />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
