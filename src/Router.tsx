@@ -7,6 +7,7 @@ import { Dashboard } from "./pages/Dashboard";
 import { UserContextProvider } from "./contexts/UserContext";
 import { NotFound } from "./pages/NotFound";
 import { WhitelistList } from "./pages/WhitelistList";
+import { Profile } from "./pages/Profile";
 
 export const Router = () => {
   const { loading, user } = useAuth();
@@ -28,6 +29,7 @@ export const Router = () => {
                 <Route path="/whitelists" element={<WhitelistList />} />
               </>
             )}
+            <Route path="/profile" element={<Profile />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </UserContextProvider>

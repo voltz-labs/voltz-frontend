@@ -11,9 +11,9 @@ export const NavBar = () => {
 
   return (
     <Navbar
-      bg="dark"
-      variant="dark"
-      className="text-light fs-4 fw-bold"
+      bg="light"
+      variant="light"
+      className="text-light fs-4 fw-bold shadow-sm"
       expand="lg"
     >
       <Container>
