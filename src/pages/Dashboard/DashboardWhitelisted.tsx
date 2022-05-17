@@ -1,5 +1,8 @@
-import { Fallback } from "../../components/Fallback";
 import { Page } from "../../components/Page";
+import { PageContainer } from "../../components/PageContainer";
+import { PageFallback } from "../../components/PageFallback";
+import { PageTitle } from "../../components/PageTitle";
+import { PageTitleText } from "../../components/PageTitleText";
 import { RecentPolls } from "./components/RecentPolls";
 import { RecentVotes } from "./components/RecentVotes";
 import { useQueryDashboard } from "./hooks/useQueryDashboard";
@@ -9,9 +12,7 @@ export const DashboardWhitelisted = () => {
 
   if (Q.fallback) {
     return (
-      <Page title="Dashboard">
-        <Fallback loading={Q.loading} errors={Q.errors} />
-      </Page>
+      <PageFallback title="Dashboard" errors={Q.errors} loading={Q.loading} />
     );
   }
   const {
@@ -20,8 +21,13 @@ export const DashboardWhitelisted = () => {
 
   return (
     <Page title="Dashboard">
-      <RecentPolls polls={polls.items} />
-      <RecentVotes votes={votes.items} />
+      <PageTitle>
+        <PageTitleText>Dashboard</PageTitleText>
+      </PageTitle>
+      <PageContainer>
+        <RecentPolls polls={polls.items} />
+        <RecentVotes votes={votes.items} />
+      </PageContainer>
     </Page>
   );
 };

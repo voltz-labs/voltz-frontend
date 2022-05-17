@@ -1,6 +1,7 @@
 import { Badge, Button, Table } from "react-bootstrap";
-import { Fallback } from "../../components/Fallback";
 import { Page } from "../../components/Page";
+import { PageContainer } from "../../components/PageContainer";
+import { PageFallback } from "../../components/PageFallback";
 import { PageTitle } from "../../components/PageTitle";
 import { PageTitleText } from "../../components/PageTitleText";
 import { gql } from "../../functions/gql";
@@ -16,9 +17,7 @@ export const WhitelistList = () => {
 
   if (Q.fallback) {
     return (
-      <Page title="Whitelists">
-        <Fallback loading={Q.loading} errors={Q.errors} />
-      </Page>
+      <PageFallback title="Whitelists" errors={Q.errors} loading={Q.loading} />
     );
   }
 
@@ -61,34 +60,40 @@ export const WhitelistList = () => {
       <PageTitle>
         <PageTitleText>Whitelists</PageTitleText>
       </PageTitle>
-      <Table hover responsive>
-        <thead>
-          <tr>
-            <th>User Address</th>
-            <th>Is Admin?</th>
-            <th>Options</th>
-          </tr>
-        </thead>
-        <tbody>
-          {whitelists.items.map((whitelist) => (
-            <tr key={whitelist.userAddress}>
-              <td>{whitelist.userAddress}</td>
-              <td>
-                {whitelist.isAdmin ? <Badge bg="primary">Yes</Badge> : <Badge bg="secondary">No</Badge>}
-              </td>
-              <td>
-                <Button
-                  variant="danger"
-                  onClick={createOnDelete(whitelist.userAddress)}
-                  disabled={whitelist.isAdmin}
-                >
-                  Delete
-                </Button>
-              </td>
+      <PageContainer>
+        <Table hover responsive>
+          <thead>
+            <tr>
+              <th>User Address</th>
+              <th>Is Admin?</th>
+              <th>Options</th>
             </tr>
-          ))}
-        </tbody>
-      </Table>
+          </thead>
+          <tbody>
+            {whitelists.items.map((whitelist) => (
+              <tr key={whitelist.userAddress}>
+                <td>{whitelist.userAddress}</td>
+                <td>
+                  {whitelist.isAdmin ? (
+                    <Badge bg="primary">Yes</Badge>
+                  ) : (
+                    <Badge bg="secondary">No</Badge>
+                  )}
+                </td>
+                <td>
+                  <Button
+                    variant="danger"
+                    onClick={createOnDelete(whitelist.userAddress)}
+                    disabled={whitelist.isAdmin}
+                  >
+                    Delete
+                  </Button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </Table>
+      </PageContainer>
     </Page>
   );
 };
